@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}FinSight{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+    {% block css %}{% endblock %}
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <a href="{{ url_for('dashboard') }}" class="logo">
+            <i class="fa-solid fa-wallet"></i>
+            <h2>FinSight</h2>
+        </a>
+
+        <ul class="menu">
+
+            <li>
+                <a href="{{ url_for('dashboard') }}">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('expense.expenses') }}">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Expenses</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('income.incomes') }}">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                    <span>Income</span>
+                </a>
+            </li>
+
+            <!-- Accounts -->
+            <li>
+                <a href="{{ url_for('account.accounts') }}">
+                    <i class="fa-solid fa-building-columns"></i>
+                    <span>Accounts</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('budget.budgets') }}">
+                    <i class="fa-solid fa-bullseye"></i>
+                    <span>Budget</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('profile.view_profile') }}">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('auth.logout') }}">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <div class="topbar">
+
+            <div class="page-title">
+                {% block page_title %}
+                Dashboard
+                {% endblock %}
+            </div>
+
+            
+
+        </div>
+
+        <div class="content">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,130 @@
+.expense-container{
+    max-width:900px;
+    margin:0 auto;
+}
+
+.expense-form{
+    background:#fff;
+    padding:35px;
+    border-radius:15px;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+.expense-form h2{
+    margin-bottom:30px;
+    color:#0F172A;
+    font-size:30px;
+}
+
+.form-group{
+    margin-bottom:22px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:#334155;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+    width:100%;
+    padding:14px;
+    border:1px solid #CBD5E1;
+    border-radius:10px;
+    font-size:15px;
+    outline:none;
+    transition:.3s;
+    background:#fff;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+    border-color:#2563EB;
+    box-shadow:0 0 0 3px rgba(37,99,235,.15);
+}
+
+.form-group textarea{
+    resize:vertical;
+}
+
+.btn-save{
+    background:#2563EB;
+    color:#fff;
+    border:none;
+    padding:14px 28px;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.btn-save:hover{
+    background:#1D4ED8;
+}
+.expense-table{
+    margin-top:35px;
+    background:#fff;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+.expense-table h2{
+    margin-bottom:20px;
+    color:#0F172A;
+}
+
+.expense-table table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.expense-table th{
+    background:#F8FAFC;
+    padding:15px;
+    text-align:left;
+    color:#475569;
+}
+
+.expense-table td{
+    padding:15px;
+    border-top:1px solid #E2E8F0;
+}
+
+.no-data{
+    text-align:center;
+    color:#94A3B8;
+    padding:25px;
+}
+.delete-btn{
+    display:inline-block;
+    padding:8px 14px;
+    background:#dc2626;
+    color:#fff;
+    text-decoration:none;
+    border-radius:6px;
+    font-size:14px;
+}
+
+.delete-btn:hover{
+    background:#b91c1c;
+}
+.edit-btn{
+    display:inline-block;
+    padding:8px 14px;
+    background:#2563eb;
+    color:#fff;
+    text-decoration:none;
+    border-radius:6px;
+    margin-right:8px;
+    font-size:14px;
+}
+
+.edit-btn:hover{
+    background:#1d4ed8;
+}

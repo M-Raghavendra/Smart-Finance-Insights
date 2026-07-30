@@ -1,0 +1,46 @@
+.budget-container{
+    padding:30px;
+}
+
+.budget-card{
+    background:white;
+    max-width:500px;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.budget-card h2{
+    margin-bottom:20px;
+}
+
+.form-group{
+    margin-bottom:18px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+.form-group input{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+
+.btn-save{
+    background:#2563EB;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.btn-save:hover{
+    background:#1d4ed8;
+}
