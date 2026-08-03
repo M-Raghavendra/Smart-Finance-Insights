@@ -5,3 +5,5 @@ __pycache__/
 
 .vscode/
 
+database/finance.db
+static/uploads/

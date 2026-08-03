@@ -19,12 +19,12 @@ Dashboard Overview
 
 {% if budget_used >= 100 %}
 <div class="alert danger">
-    ❌ Budget exceeded! You have exceeded your monthly budget.
+    🚨 Budget exceeded! You have exceeded your monthly budget.
 </div>
 
 {% elif budget_used >= 80 %}
 <div class="alert warning">
-    ⚠️ Warning! You have used {{ budget_used }}% of your monthly budget.
+    ⚠️ Budget Warning! You have used {{ budget_used }}% of your monthly budget.
 </div>
 {% endif %}
 
@@ -38,7 +38,7 @@ Dashboard Overview
         <h1>👋 Welcome Back, {{ current_user.full_name }}</h1>
 
         <p class="hero-subtitle">
-            Track your income, expenses and savings with FinSight.
+            💡 Track your income, expenses and savings with FinSight.
         </p>
 
         <div class="hero-stats">
@@ -93,7 +93,7 @@ Dashboard Overview
         </div>
 
         <div class="card-info">
-            <h4>Total Income</h4>
+            <h4>💰Total Income</h4>
             <h2>₹{{ "{:,.0f}".format(total_income) }}</h2>
         </div>
     </div>
@@ -105,7 +105,7 @@ Dashboard Overview
         </div>
 
         <div class="card-info">
-            <h4>Total Expenses</h4>
+            <h4>💸 Total Expense</h4>
             <h2>₹{{ "{:,.0f}".format(total_expenses) }}</h2>
         </div>
     </div>
@@ -117,7 +117,7 @@ Dashboard Overview
         </div>
 
         <div class="card-info">
-            <h4>Total Savings</h4>
+            <h4>🏦 Total Savingss</h4>
 
             <h2 {% if total_savings < 0 %}style="color:#EF4444;"{% endif %}>
                 ₹{{ "{:,.0f}".format(total_savings) }}
@@ -133,7 +133,7 @@ Dashboard Overview
         </div>
 
         <div class="card-info">
-            <h4>Monthly Budget</h4>
+            <h4>🎯 Monthly Budget</h4>
             <h2>₹{{ "{:,.0f}".format(budget_amount) }}</h2>
         </div>
     </div>
@@ -144,7 +144,7 @@ Dashboard Overview
 
 <div class="dashboard-box">
 
-    <h3>Financial Summary</h3>
+    <h3>📊 Financial Summary</h3>
 
     <table>
 
@@ -195,7 +195,7 @@ Dashboard Overview
 
     <div class="dashboard-box">
 
-        <h3>Expense Breakdown</h3>
+        <h3>📊 Expense Breakdown</h3>
 
         <div style="height:300px;">
             <canvas id="expenseChart"></canvas>
@@ -207,7 +207,7 @@ Dashboard Overview
 
     <div class="dashboard-box">
 
-        <h3>Monthly Expense Trend</h3>
+        <h3>📈 Monthly Expense Trend</h3>
 
         <div style="height:300px;">
             <canvas id="monthlyChart"></canvas>
@@ -217,13 +217,13 @@ Dashboard Overview
 
 </div>
 
-<
+
 
 <!-- Recent Transactions -->
 
 <div class="dashboard-box transactions">
 
-    <h3>Recent Transactions</h3>
+    <h3>🧾 Recent Transactions</h3>
 
     <table>
 
@@ -268,7 +268,7 @@ Dashboard Overview
     <tr>
 
         <td colspan="5" class="no-data">
-            No transactions available.
+            📭 No transactions available.
         </td>
 
     </tr>

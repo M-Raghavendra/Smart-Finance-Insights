@@ -175,6 +175,21 @@
             gap:15px;
             margin-top:25px;
         }
+        .flash-success{
+    padding:12px;
+    margin-bottom:20px;
+    border-radius:5px;
+    color:white;
+    background:#16a34a;
+}
+
+    .flash-danger{
+    padding:12px;
+    margin-bottom:20px;
+    border-radius:5px;
+    color:white;
+    background:#dc2626;
+}
 
     </style>
 
@@ -187,7 +202,25 @@
 </div>
 
 <div class="container">
-    <div class="profile-header">
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+
+            {% if category == "success" %}
+                <div class="flash-success">
+            {% else %}
+                <div class="flash-danger">
+            {% endif %}
+
+                {{ message }}
+
+                </div>
+
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<div class="profile-header">
 
     <div class="profile-avatar">
 
@@ -309,31 +342,47 @@ Save Profile
 </button>
 
 </form>
+<hr style="margin:35px 0;">
+
+<h2>Change Password</h2>
+
+<form action="{{ url_for('profile.change_password') }}" method="POST">
+
+<label>Current Password</label>
+
+<input
+type="password"
+name="current_password"
+required>
+
+<label>New Password</label>
+
+<input
+type="password"
+name="new_password"
+required>
+
+<label>Confirm New Password</label>
+
+<input
+type="password"
+name="confirm_password"
+required>
+
+<button type="submit">
+Change Password
+</button>
+
+</form>
 
 {% else %}
 
-<h2>My Profile</h2>
-
-{% if profile and profile.profile_photo %}
-
-<div style="text-align:center; margin-bottom:20px;">
-
-    <img
-        src="{{ url_for('static', filename='uploads/profile/' + profile.profile_photo) }}"
-        alt="Profile Photo"
-        width="150"
-        height="150"
-        style="border-radius:50%; object-fit:cover; border:4px solid #2563eb;">
-
-</div>
-
-{% endif %}
 
 <table>
 
 <tr>
 <td>Name</td>
-<td>{{ user.name }}</td>
+<td>{{ user.full_name }}</td>
 </tr>
 
 <tr>
