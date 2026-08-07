@@ -16,9 +16,9 @@ UPLOAD_FOLDER = "static/uploads/profile"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
-# ----------------------------
+
 # View / Edit Profile Page
-# ----------------------------
+
 @profile.route("/profile", methods=["GET"])
 @login_required
 def view_profile():
@@ -35,9 +35,9 @@ def view_profile():
     )
 
 
-# ----------------------------
+
 # Save / Update Profile
-# ----------------------------
+
 @profile.route("/profile", methods=["POST"])
 @login_required
 def save_profile():
@@ -50,9 +50,9 @@ def save_profile():
         user_profile = Profile(user_id=current_user.id)
         db.session.add(user_profile)
 
-    # ----------------------------
+  
     # Upload Profile Photo
-    # ----------------------------
+    
     photo = request.files.get("profile_photo")
 
     if photo and photo.filename != "":
@@ -65,9 +65,9 @@ def save_profile():
 
         user_profile.profile_photo = filename
 
-    # ----------------------------
+    
     # Save Profile Details
-    # ----------------------------
+    
     user_profile.organization_name = data.get("organization_name")
     user_profile.mobile_number = data.get("mobile_number")
     user_profile.currency = data.get("currency")

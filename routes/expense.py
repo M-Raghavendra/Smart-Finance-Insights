@@ -79,13 +79,13 @@ def delete_expense(id):
         user_id=current_user.id
     ).first_or_404()
 
-    # Restore balance
+    # Restore account balance
     expense.account.balance += expense.amount
 
     db.session.delete(expense)
     db.session.commit()
 
-    url_for("expense.expenses")
+    return redirect(url_for("expense.expenses"))
 
 
 @expense.route("/expense/edit/<int:id>", methods=["GET", "POST"])
@@ -132,7 +132,7 @@ def edit_expense(id):
         expense.description = request.form.get("description")
 
         db.session.commit()
-
+        
         return redirect(url_for("expense.expenses"))
 
     return render_template(

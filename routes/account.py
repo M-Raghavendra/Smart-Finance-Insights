@@ -17,9 +17,8 @@ from models.account import Account
 account = Blueprint("account", __name__)
 
 
-# -------------------------
 # View + Add Account
-# -------------------------
+
 @account.route("/accounts", methods=["GET", "POST"])
 @login_required
 def accounts():
@@ -56,9 +55,9 @@ def accounts():
     )
 
 
-# -------------------------
+
 # Edit Account
-# -------------------------
+
 @account.route("/accounts/edit/<int:id>", methods=["GET", "POST"])
 @login_required
 def edit_account(id):
@@ -87,9 +86,9 @@ def edit_account(id):
     )
 
 
-# -------------------------
+
 # Delete Account
-# -------------------------
+
 @account.route("/accounts/delete/<int:id>")
 @login_required
 def delete_account(id):
