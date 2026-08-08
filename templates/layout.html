@@ -71,6 +71,20 @@
             </li>
 
             <li>
+                <a href="{{ url_for('investment.investments') }}">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Investments</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('goal.goals') }}">
+                    <i class="fa-solid fa-bullseye"></i>
+                    <span>Goals</span>
+                </a>
+            </li>
+
+            <li>
                 <a href="{{ url_for('auth.logout') }}">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Logout</span>
@@ -84,17 +98,6 @@
     <!-- Main Content -->
     <div class="main-content">
 
-        <div class="topbar">
-
-            <div class="page-title">
-                {% block page_title %}
-                Dashboard
-                {% endblock %}
-            </div>
-
-            
-
-        </div>
 
         <div class="content">
 

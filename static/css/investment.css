@@ -1,0 +1,669 @@
+
+.investment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.investment-header h1 {
+    margin: 0 0 6px;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.investment-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   Buttons
+========================================================= */
+
+.btn-primary {
+    display: inline-block;
+    padding: 11px 18px;
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   Portfolio Summary Cards
+========================================================= */
+
+.portfolio-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.portfolio-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 5px 20px rgba(15, 23, 42, 0.07);
+    border: 1px solid #eef2f7;
+}
+
+.portfolio-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 12px;
+    background: #eff6ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 23px;
+}
+
+.portfolio-card span {
+    display: block;
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+.portfolio-card h2 {
+    margin: 0 0 5px;
+    font-size: 24px;
+    color: #0f172a;
+}
+
+.portfolio-card small {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   Positive / Negative
+========================================================= */
+
+.positive {
+    color: #16a34a !important;
+}
+
+.negative {
+    color: #dc2626 !important;
+}
+
+
+/* =========================================================
+   Main Investment Grid
+========================================================= */
+
+.investment-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   General Box
+========================================================= */
+
+.investment-box {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 5px 20px rgba(15, 23, 42, 0.07);
+    border: 1px solid #eef2f7;
+}
+
+.box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.box-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #0f172a;
+}
+
+.box-header span {
+    color: #64748b;
+    font-size: 12px;
+}
+
+
+
+.allocation-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 20px;
+}
+
+.allocation-chart {
+    height: 260px;
+    position: relative;
+}
+
+.allocation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.allocation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.allocation-item span {
+    color: #475569;
+    font-size: 13px;
+}
+
+.allocation-item strong {
+    color: #0f172a;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   Portfolio Performance
+========================================================= */
+
+.performance-summary {
+    display: flex;
+    gap: 45px;
+    margin-bottom: 20px;
+}
+
+.performance-summary div {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.performance-summary span {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.performance-summary strong {
+    font-size: 20px;
+}
+
+.performance-placeholder {
+    height: 220px;
+    position: relative;
+}
+
+.performance-placeholder p {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   Holdings
+========================================================= */
+
+.holdings-box {
+    margin-bottom: 20px;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.investment-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.investment-table th {
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+    padding: 13px 12px;
+    white-space: nowrap;
+}
+
+.investment-table td {
+    padding: 15px 12px;
+    border-bottom: 1px solid #eef2f7;
+    font-size: 13px;
+    color: #334155;
+    white-space: nowrap;
+}
+
+.investment-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.asset-badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   Edit / Delete Buttons
+========================================================= */
+
+.btn-edit {
+    display: inline-block;
+    padding: 6px 10px;
+    background: #eff6ff;
+    color: #2563eb;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.btn-edit:hover {
+    background: #dbeafe;
+}
+
+.btn-delete {
+    display: inline-block;
+    padding: 6px 10px;
+    background: #fef2f2;
+    color: #dc2626;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.btn-delete:hover {
+    background: #fee2e2;
+}
+
+
+/* =========================================================
+   Empty State
+========================================================= */
+
+.empty-state {
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 42px;
+    margin-bottom: 12px;
+}
+
+.empty-state p {
+    margin: 0 0 6px;
+    color: #475569;
+    font-weight: 600;
+}
+
+.empty-state span {
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   Add Investment Form
+========================================================= */
+
+.add-investment-box {
+    margin-top: 20px;
+}
+
+.box-header p {
+    margin: 6px 0 0;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.investment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.form-row:nth-of-type(2) {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-group-wide {
+    grid-column: span 1;
+}
+
+.form-group label {
+    color: #334155;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    border: 1px solid #dbe2ea;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #0f172a;
+    font-size: 13px;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.investment-form .btn-primary {
+    align-self: flex-start;
+}
+
+
+/* =========================================================
+   Responsive
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .portfolio-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .investment-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .investment-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .portfolio-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .allocation-content {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row,
+    .form-row:nth-of-type(2) {
+        grid-template-columns: 1fr;
+    }
+
+    .performance-summary {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+
+
+/* =====================================================
+   FINANCIAL GOALS OVERVIEW
+   ===================================================== */
+
+.financial-goals-overview {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 22px;
+    margin-top: 20px;
+}
+
+
+/* Header */
+
+.financial-goals-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.financial-goals-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #111827;
+}
+
+.financial-goals-header p {
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.view-all-goals {
+    color: #2563eb;
+    font-size: 13px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.view-all-goals:hover {
+    text-decoration: underline;
+}
+
+
+/* Goals list */
+
+.financial-goals-list {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Individual goal */
+
+.financial-goal-row {
+    display: grid;
+    grid-template-columns: 42px 220px 1fr 150px;
+    align-items: center;
+    gap: 16px;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid #eef2f7;
+}
+
+.financial-goal-row:last-child {
+    border-bottom: none;
+}
+
+
+/* Icon */
+
+.financial-goal-icon {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eff6ff;
+
+    font-size: 18px;
+}
+
+
+/* Goal information */
+
+.financial-goal-info h4 {
+    margin: 0 0 5px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #111827;
+}
+
+.financial-goal-info span {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+
+/* Progress */
+
+.financial-goal-progress {
+    width: 100%;
+}
+
+.financial-goal-progress-top {
+    display: flex;
+    justify-content: flex-end;
+
+    margin-bottom: 6px;
+}
+
+.financial-goal-progress-top span {
+    font-size: 11px;
+    color: #64748b;
+}
+
+
+/* Progress bar */
+
+.financial-goal-progress-bar {
+    width: 100%;
+    height: 7px;
+
+    background: #e5e7eb;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+}
+
+.financial-goal-progress-fill {
+    height: 100%;
+
+    background: #16a34a;
+
+    border-radius: 10px;
+
+    transition: width 0.3s ease;
+}
+
+
+/* Date */
+
+.financial-goal-date {
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    gap: 4px;
+}
+
+.financial-goal-date strong {
+    font-size: 12px;
+    color: #475569;
+}
+
+.financial-goal-date span {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.financial-goal-date .goal-completed {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+
+/* Empty state */
+
+.no-financial-goals {
+    text-align: center;
+
+    padding: 45px 20px;
+
+    color: #94a3b8;
+}
+
+.no-goals-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.no-financial-goals h4 {
+    margin: 0 0 5px;
+
+    color: #334155;
+}
+
+.no-financial-goals p {
+    margin: 0 0 15px;
+
+    font-size: 13px;
+}
+

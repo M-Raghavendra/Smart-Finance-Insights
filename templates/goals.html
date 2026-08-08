@@ -1,0 +1,518 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Financial Goals
+{% endblock %}
+
+{% block css %}
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/goal.css') }}">
+
+{% endblock %}
+
+{% block page_title %}
+Financial Goals
+{% endblock %}
+
+{% block content %}
+
+<div class="goal-page">
+
+    <!-- =========================================
+         GOAL SUMMARY
+    ========================================== -->
+
+    <div class="goal-summary">
+
+        <!-- Total Goals -->
+
+        <div class="goal-card">
+
+            <span>Total Goals</span>
+
+            <h2>
+                {{ total_goals }}
+            </h2>
+
+        </div>
+
+
+        <!-- Active Goals -->
+
+        <div class="goal-card">
+
+            <span>Active Goals</span>
+
+            <h2>
+                {{ active_goals }}
+            </h2>
+
+        </div>
+
+
+        <!-- Completed Goals -->
+
+        <div class="goal-card">
+
+            <span>Completed Goals</span>
+
+            <h2>
+                {{ completed_goals }}
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         ADD FINANCIAL GOAL
+    ========================================== -->
+
+    <div class="goal-box">
+
+        <div class="goal-header">
+
+            <div>
+
+                <h2>
+                    Add Financial Goal
+                </h2>
+
+                <p>
+                    Create a goal and track your progress.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <form method="POST">
+
+
+            <!-- Goal Name + Goal Type -->
+
+            <div class="goal-form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Goal Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="goal_name"
+                        placeholder="Example: Buy a Car"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Goal Type
+                    </label>
+
+                    <select
+                        name="goal_type"
+                        required
+                    >
+
+                        <option value="">
+                            Select Goal Type
+                        </option>
+
+                        <option value="Short Term">
+                            Short Term
+                        </option>
+
+                        <option value="Medium Term">
+                            Medium Term
+                        </option>
+
+                        <option value="Long Term">
+                            Long Term
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- Target + Current Amount -->
+
+            <div class="goal-form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Target Amount
+                    </label>
+
+                    <input
+                        type="number"
+                        name="target_amount"
+                        step="0.01"
+                        min="0"
+                        placeholder="Example: 100000"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Current Amount
+                    </label>
+
+                    <input
+                        type="number"
+                        name="current_amount"
+                        step="0.01"
+                        min="0"
+                        value="0"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Target Date + Category -->
+
+            <div class="goal-form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Target Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="target_date"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Category
+                    </label>
+
+                    <select
+                        name="category"
+                        required
+                    >
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                        <option value="Emergency">
+                            Emergency
+                        </option>
+
+                        <option value="Education">
+                            Education
+                        </option>
+
+                        <option value="Travel">
+                            Travel
+                        </option>
+
+                        <option value="Vehicle">
+                            Vehicle
+                        </option>
+
+                        <option value="Home">
+                            Home
+                        </option>
+
+                        <option value="Retirement">
+                            Retirement
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- Priority -->
+
+            <div class="goal-form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Priority
+                    </label>
+
+                    <select
+                        name="priority"
+                        required
+                    >
+
+                        <option value="High">
+                            High
+                        </option>
+
+                        <option value="Medium" selected>
+                            Medium
+                        </option>
+
+                        <option value="Low">
+                            Low
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- Notes -->
+
+            <div class="form-group">
+
+                <label>
+                    Notes
+                </label>
+
+                <textarea
+                    name="notes"
+                    rows="4"
+                    placeholder="Optional notes about this goal"
+                ></textarea>
+
+            </div>
+
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                class="btn-primary"
+            >
+                Add Goal
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- =========================================
+         GOALS LIST
+    ========================================== -->
+
+    <div class="goal-box">
+
+        <div class="goal-header">
+
+            <div>
+
+                <h2>
+                    My Financial Goals
+                </h2>
+
+                <p>
+                    Track your progress toward each goal.
+                </p>
+
+            </div>
+
+            <span>
+                {{ total_goals }} goals
+            </span>
+
+        </div>
+
+
+        {% if goals %}
+
+            {% for goal in goals %}
+
+                <div class="goal-item">
+
+
+                    <!-- Goal Information -->
+
+                    <div class="goal-info">
+
+                        <h3>
+                            {{ goal.goal_name }}
+                        </h3>
+
+                        <p>
+                            {{ goal.category }}
+                            ·
+                            {{ goal.goal_type }}
+                            ·
+                            {{ goal.priority }} Priority
+                        </p>
+
+                        <small>
+                            Target Date:
+                            {{ goal.target_date.strftime("%d-%m-%Y") }}
+                        </small>
+
+                    </div>
+
+
+                    <!-- Goal Progress -->
+
+                    <div class="goal-progress">
+
+                        <div class="goal-progress-top">
+
+                            <span>
+
+                                ₹{{ "{:,.0f}".format(
+                                    goal.current_amount
+                                ) }}
+
+                                /
+
+                                ₹{{ "{:,.0f}".format(
+                                    goal.target_amount
+                                ) }}
+
+                            </span>
+
+
+                            <strong>
+                                {{ goal.progress }}%
+                            </strong>
+
+                        </div>
+
+
+                        <!-- Progress Bar -->
+
+                        <div class="progress-bar">
+
+                            <div
+                                class="progress-fill"
+                                style="width: {{ goal.progress }}%;"
+                            ></div>
+
+                        </div>
+
+
+                        <small>
+
+                            Remaining:
+                            ₹{{ "{:,.0f}".format(
+                                goal.remaining_amount
+                            ) }}
+
+                        </small>
+
+                    </div>
+
+
+                    <!-- Goal Status -->
+
+                    <div class="goal-status">
+
+                        {% if goal.status == "Completed" %}
+
+                            <span class="status-completed">
+                                ✓ Completed
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-active">
+                                ● In Progress
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- Actions -->
+
+                    <div class="goal-actions">
+
+                        <a
+                            href="{{ url_for(
+                                'goal.edit_goal',
+                                id=goal.id
+                            ) }}"
+                            class="btn-edit"
+                        >
+                            Edit
+                        </a>
+
+
+                        <a
+                            href="{{ url_for(
+                                'goal.delete_goal',
+                                id=goal.id
+                            ) }}"
+                            class="btn-delete"
+                            onclick="return confirm(
+                                'Are you sure you want to delete this goal?'
+                            )"
+                        >
+                            Delete
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+            <!-- No Goals -->
+
+            <div class="empty-goal">
+
+                <div class="empty-goal-icon">
+                    🎯
+                </div>
+
+                <h3>
+                    No financial goals yet
+                </h3>
+
+                <p>
+                    Create your first financial goal above
+                    to start tracking your progress.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

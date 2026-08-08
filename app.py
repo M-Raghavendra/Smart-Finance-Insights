@@ -11,12 +11,16 @@ from models.budget import Budget
 from models.income import Income
 from models.account import Account
 
+
+
 from routes.auth import auth
 from routes.profile import profile
 from routes.expense import expense
 from routes.budget import budget
 from routes.income import income
 from routes.account import account
+from routes.investment import investment
+from routes.goal import goal
 
 app = Flask(__name__)
 
@@ -43,6 +47,8 @@ app.register_blueprint(expense)
 app.register_blueprint(budget)
 app.register_blueprint(income)
 app.register_blueprint(account)
+app.register_blueprint(investment)
+app.register_blueprint(goal)
 
 
 # Home Page
@@ -80,9 +86,18 @@ def dashboard():
     accounts = Account.query.filter_by(user_id=current_user.id).all()
 
     # Calculate totals
-    total_expenses = sum(exp.amount for exp in expenses)
-    total_income = sum(inc.amount for inc in incomes)
-    total_account_balance = sum(acc.balance for acc in accounts)
+    total_expenses = sum(
+        exp.amount for exp in expenses
+    )
+
+    total_income = sum(
+        inc.amount for inc in incomes
+    )
+
+    total_account_balance = sum(
+        acc.balance for acc in accounts
+    )
+
 
     # Savings
     total_savings = total_income - total_expenses
@@ -153,6 +168,8 @@ def dashboard():
         total_expenses=total_expenses,
         total_savings=total_savings,
         total_account_balance=total_account_balance,
+
+
         budget_amount=budget_amount,
         remaining_budget=remaining_budget,
         budget_used=budget_used,
