@@ -420,5 +420,13 @@
         flex: 1;
         text-align: center;
     }
+    .btn-details {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+}
 
 }

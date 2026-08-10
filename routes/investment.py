@@ -4,7 +4,7 @@ from datetime import datetime
 
 from extensions import db
 from models.investment import Investment
-from models.goal import Goal
+
 
 
 investment = Blueprint(
@@ -82,48 +82,6 @@ def investments():
         Investment.purchase_date.desc()
     ).all()
 
-
-    # -----------------------------------------------------
-    # GET USER FINANCIAL GOALS
-    # -----------------------------------------------------
-
-    financial_goals = Goal.query.filter_by(
-        user_id=current_user.id
-    ).order_by(
-        Goal.target_date.asc()
-    ).all()
-
-
-    # -----------------------------------------------------
-    # CALCULATE GOAL PROGRESS
-    # -----------------------------------------------------
-
-    for goal_item in financial_goals:
-
-        if goal_item.target_amount > 0:
-
-            goal_item.progress = round(
-                (
-                    goal_item.current_amount
-                    / goal_item.target_amount
-                ) * 100,
-                2
-            )
-
-        else:
-
-            goal_item.progress = 0
-
-
-        if goal_item.progress > 100:
-            goal_item.progress = 100
-
-
-        goal_item.remaining_amount = max(
-            goal_item.target_amount
-            - goal_item.current_amount,
-            0
-        )
 
 
     # -----------------------------------------------------
@@ -389,7 +347,7 @@ def investments():
 
         top_holdings=top_holdings,
 
-        financial_goals=financial_goals,
+    
 
         best_performer=best_performer,
 
