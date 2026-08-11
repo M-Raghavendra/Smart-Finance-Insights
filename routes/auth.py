@@ -2,6 +2,8 @@ from flask import Blueprint, request, render_template, redirect, url_for
 from models.user import User
 from extensions import db, bcrypt
 from flask_login import login_user, logout_user, login_required
+import re
+
 
 auth = Blueprint("auth", __name__)
 
@@ -18,15 +20,95 @@ def register():
     email = request.form.get("email")
     password = request.form.get("password")
 
+    # -------------------- Required Fields --------------------
+
     if not full_name or not email or not password:
-        return "All fields are required", 400
+        return render_template(
+            "register.html",
+            error="Please fill in all fields.",
+            full_name=full_name or "",
+            email=email or ""
+        ), 400
+
+    # -------------------- Email Validation --------------------
+
+    email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+
+    if not re.match(
+    r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+    email
+):
+        return render_template(
+        "register.html",
+        email_error="Please enter a valid email address.",
+        full_name=full_name,
+        email=email
+    ), 400
+
+    # -------------------- Password Validation --------------------
+
+    # Minimum 8 characters
+    if len(password) < 8:
+        return render_template(
+            "register.html",
+            error="Password must be at least 8 characters long.",
+            full_name=full_name,
+            email=email
+        ), 400
+
+    # At least one uppercase letter
+    if not re.search(r"[A-Z]", password):
+        return render_template(
+            "register.html",
+            error="Password must contain at least one uppercase letter.",
+            full_name=full_name,
+            email=email
+        ), 400
+
+    # At least one lowercase letter
+    if not re.search(r"[a-z]", password):
+        return render_template(
+            "register.html",
+            error="Password must contain at least one lowercase letter.",
+            full_name=full_name,
+            email=email
+        ), 400
+
+    # At least one number
+    if not re.search(r"\d", password):
+        return render_template(
+            "register.html",
+            error="Password must contain at least one number.",
+            full_name=full_name,
+            email=email
+        ), 400
+
+    # At least one special character
+    if not re.search(r"[@$!%*?&]", password):
+        return render_template(
+            "register.html",
+            error="Password must contain at least one special character.",
+            full_name=full_name,
+            email=email
+        ), 400
+
+    # -------------------- Check Existing Email --------------------
 
     existing_user = User.query.filter_by(email=email).first()
 
     if existing_user:
-        return "Email already registered", 400
+        return render_template(
+            "register.html",
+            error="This email is already registered. Please use another email.",
+            full_name=full_name,
+            email=email
+        ), 400
+
+    # -------------------- Hash Password --------------------
 
     hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+
+    # -------------------- Create User --------------------
 
     new_user = User(
         full_name=full_name,

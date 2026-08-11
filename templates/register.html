@@ -1,143 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Register | Smart Finance Insights</title>
 
     <style>
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Arial, Helvetica, sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
-        body{
-            background:#f4f6f9;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            height:100vh;
+        body {
+            background: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        .container{
-            width:400px;
-            background:white;
-            padding:35px;
-            border-radius:10px;
-            box-shadow:0 5px 20px rgba(0,0,0,.15);
+        .container {
+            width: 400px;
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
         }
 
-        h2{
-            text-align:center;
-            color:#2c3e50;
-            margin-bottom:10px;
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
         }
 
-        p{
-            text-align:center;
-            color:#777;
-            margin-bottom:25px;
+        p {
+            text-align: center;
+            color: #777;
+            margin-bottom: 25px;
         }
 
-        label{
-            display:block;
-            margin-bottom:5px;
-            font-weight:bold;
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
         }
 
-        input{
-            width:100%;
-            padding:12px;
-            margin-bottom:18px;
-            border:1px solid #ccc;
-            border-radius:6px;
-            font-size:15px;
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
         }
 
-        button{
-            width:100%;
-            padding:12px;
-            border:none;
-            border-radius:6px;
-            background:#2563eb;
-            color:white;
-            font-size:16px;
-            cursor:pointer;
+        input:focus {
+            outline: none;
+            border-color: #2563eb;
         }
 
-        button:hover{
-            background:#1d4ed8;
+        /* Email validation error */
+        .field-error {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            padding: 9px 10px;
+            border-radius: 6px;
+            margin-top: -10px;
+            margin-bottom: 18px;
+            font-size: 13px;
         }
 
-        .login-link{
-            margin-top:20px;
-            text-align:center;
+        .password-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: -12px;
+            margin-bottom: 18px;
+            text-align: left;
+            line-height: 1.4;
         }
 
-        .login-link a{
-            color:#2563eb;
-            text-decoration:none;
-            font-weight:bold;
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .login-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .login-link a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
         }
 
     </style>
 
 </head>
 
+
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h2>Create Account</h2>
+        <h2>Create Account</h2>
 
-    <p>Smart Finance Insights</p>
+        <p>Smart Finance Insights</p>
 
-    <form action="/register" method="POST">
 
-        <label>Full Name</label>
-        <input
-            type="text"
-            name="full_name"
-            placeholder="Enter Full Name"
-            required
-        >
+        <form action="/register" method="POST">
 
-        <label>Email</label>
-        <input
-            type="email"
-            name="email"
-            placeholder="Enter Email"
-            required
-        >
+            <!-- Full Name -->
 
-        <label>Password</label>
-        <input
-            type="password"
-            name="password"
-            placeholder="Enter Password"
-            required
-        >
+            <label>
+                Full Name
+            </label>
 
-        <button type="submit">
-            Register
-        </button>
+            <input
+                type="text"
+                name="full_name"
+                placeholder="Enter Full Name"
+                value="{{ full_name or '' }}"
+                required
+            >
 
-    </form>
 
-    <div class="login-link">
+            <!-- Email -->
 
-        Already have an account?
+            <label>
+                Email
+            </label>
 
-        <a href="/login">
-            Login
-        </a>
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter Email"
+                value="{{ email or '' }}"
+                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                title="Please enter a valid email address, for example: example@gmail.com"
+                required
+            >
+
+            {% if email_error %}
+                <div class="field-error">
+                    {{ email_error }}
+                </div>
+            {% endif %}
+
+
+            <!-- Password -->
+
+            <label>
+                Password
+            </label>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter Password"
+                minlength="8"
+                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}"
+                title="Password must be at least 8 characters and contain an uppercase letter, lowercase letter, number, and special character."
+                required
+            >
+
+            <div class="password-hint">
+                Password must contain at least 8 characters,
+                including uppercase, lowercase, number and special character.
+            </div>
+
+
+            <!-- Register -->
+
+            <button type="submit">
+                Register
+            </button>
+
+        </form>
+
+
+        <div class="login-link">
+
+            Already have an account?
+
+            <a href="/login">
+                Login
+            </a>
+
+        </div>
 
     </div>
 
-</div>
-
 </body>
+
 </html>
