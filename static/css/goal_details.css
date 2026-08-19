@@ -1,0 +1,762 @@
+/* =========================================================
+   GOAL DETAILS PAGE
+   ========================================================= */
+
+.goal-details-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px;
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.goal-details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.goal-details-title-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.goal-details-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eef4ff;
+    font-size: 25px;
+}
+
+.goal-details-header h1 {
+    margin: 0;
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.goal-subtitle {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.back-goals-btn {
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px 16px;
+    border-radius: 8px;
+}
+
+.back-goals-btn:hover {
+    background: #eef4ff;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.details-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 26px;
+    margin-bottom: 22px;
+
+    box-shadow:
+        0 4px 18px rgba(15, 23, 42, 0.06);
+
+    border: 1px solid #eef2f7;
+}
+
+.details-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.details-card-header h2 {
+    margin: 0;
+    font-size: 21px;
+    line-height: 1.3;
+    font-weight: 700;
+}
+
+.details-card-header p {
+    margin: 6px 0 0;
+    color: #94a3b8;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status-badge {
+    padding: 7px 13px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status-badge.active {
+    background: #eaf2ff;
+    color: #2563eb;
+}
+
+.status-badge.completed {
+    background: #eafaf0;
+    color: #16a34a;
+}
+
+
+/* =========================================================
+   OVERVIEW
+   ========================================================= */
+
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.overview-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.overview-label {
+    display: block;
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.overview-item strong {
+    font-size: 19px;
+    color: #0f172a;
+}
+
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+.large-progress-number {
+    color: #2563eb;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.details-progress-bar {
+    height: 12px;
+    width: 100%;
+    background: #e5e7eb;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.details-progress-fill {
+    height: 100%;
+    background: #2563eb;
+    border-radius: 20px;
+    transition: width 0.4s ease;
+}
+
+.progress-summary {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   STATISTICS - 7 CONSISTENT CARDS
+   ========================================================= */
+
+.goal-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+    margin-top: 24px;
+}
+
+.goal-stat-card {
+    min-width: 0;
+    min-height: 112px;
+    box-sizing: border-box;
+
+    padding: 18px 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+}
+
+.goal-stat-card > span {
+    display: block;
+    height: 22px;
+    margin: 0 0 7px;
+
+    font-size: 18px;
+    line-height: 22px;
+}
+
+.goal-stat-card > strong {
+    display: block;
+    margin: 0;
+
+    /*
+       Same font size for all 7 values.
+       This keeps 1 and long currency values
+       visually consistent.
+    */
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 700;
+
+    color: #0f172a;
+    white-space: nowrap;
+}
+
+.goal-stat-card > small {
+    display: block;
+    margin-top: 5px;
+
+    color: #64748b;
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 400;
+
+    white-space: nowrap;
+}
+
+/* Completed */
+.completed-stat {
+    border-color: #9ad3a6;
+}
+
+.completed-stat > strong {
+    color: #16a34a;
+}
+
+/* In Progress */
+.progress-stat {
+    border-color: #f2c94c;
+}
+
+.progress-stat > strong {
+    color: #2563eb;
+}
+
+/* Pending */
+.pending-stat > strong {
+    color: #f59e0b;
+}
+
+/* Cost cards */
+.cost-stat > strong {
+    color: #0f172a;
+}
+
+/* Cost Variance */
+.variance-positive {
+    color: #16a34a !important;
+}
+
+.variance-negative {
+    color: #dc2626 !important;
+}
+
+
+/* =========================================================
+   ADD PART BUTTON
+   ========================================================= */
+
+.add-part-btn {
+    border: none;
+    background: #2563eb;
+    color: white;
+    padding: 11px 17px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.add-part-btn:hover {
+    background: #1d4ed8;
+}
+
+
+/* =========================================================
+   PART FORM
+   ========================================================= */
+
+.part-form {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 24px;
+}
+
+.part-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 7px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #dbe2ea;
+    border-radius: 8px;
+    padding: 11px 12px;
+    font-size: 14px;
+    background: white;
+    outline: none;
+}
+
+.form-group input {
+    min-height: 42px;
+}
+
+.form-group textarea {
+    line-height: 1.5;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: #2563eb;
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+.part-form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.save-part-btn {
+    border: none;
+    background: #2563eb;
+    color: white;
+    padding: 11px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cancel-part-btn {
+    border: none;
+    background: #e5e7eb;
+    color: #334155;
+    padding: 11px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   PARTS
+   ========================================================= */
+
+.parts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.part-card {
+    display: flex;
+    gap: 16px;
+    padding: 22px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.part-number {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+
+    border-radius: 50%;
+    background: #eef4ff;
+    color: #2563eb;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.part-content {
+    flex: 1;
+}
+
+.part-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.part-top h3 {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.3;
+}
+
+.part-top p {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.part-status {
+    align-self: flex-start;
+    padding: 7px 12px;
+    border-radius: 20px;
+    background: #eef4ff;
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.part-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 15px;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.part-notes {
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: #f8fafc;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #64748b;
+}
+
+.part-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.part-actions select {
+    padding: 8px 10px;
+    border: 1px solid #dbe2ea;
+    border-radius: 7px;
+    font-size: 14px;
+}
+
+.small-edit-btn,
+.small-delete-btn {
+    padding: 8px 11px;
+    border-radius: 7px;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.small-edit-btn {
+    background: #eef4ff;
+    color: #2563eb;
+}
+
+.small-delete-btn {
+    background: #fff0f0;
+    color: #dc2626;
+}
+
+
+/* =========================================================
+   EMPTY PARTS
+   ========================================================= */
+
+.empty-parts {
+    text-align: center;
+    padding: 50px 20px;
+    border: 1px dashed #dbe2ea;
+    border-radius: 12px;
+    background: #fafbfc;
+}
+
+.empty-parts-icon {
+    font-size: 34px;
+    margin-bottom: 10px;
+}
+
+.empty-parts h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.empty-parts p {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 8px auto 18px;
+    max-width: 450px;
+}
+
+
+/* =========================================================
+   TIMELINE
+   ========================================================= */
+
+.timeline {
+    position: relative;
+    margin-left: 12px;
+    padding-left: 28px;
+    border-left: 2px solid #e5e7eb;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 25px;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -37px;
+    top: 2px;
+
+    width: 14px;
+    height: 14px;
+
+    border-radius: 50%;
+    background: #f59e0b;
+
+    border: 3px solid white;
+    box-shadow: 0 0 0 1px #dbe2ea;
+}
+
+.timeline-dot.completed {
+    background: #16a34a;
+}
+
+.timeline-dot.progress {
+    background: #2563eb;
+}
+
+.timeline-dot.pending {
+    background: #f59e0b;
+}
+
+.timeline-content {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+
+.timeline-title {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.timeline-title strong {
+    font-size: 17px;
+}
+
+.timeline-title span {
+    font-size: 13px;
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.timeline-content p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.timeline-empty {
+    text-align: center;
+    padding: 35px;
+    color: #64748b;
+}
+
+.timeline-empty span {
+    display: block;
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .goal-stat-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .overview-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .goal-details-page {
+        padding: 18px;
+    }
+
+    .goal-details-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .goal-details-header h1 {
+        font-size: 24px;
+    }
+
+    .overview-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .goal-stat-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .part-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: auto;
+    }
+
+    .part-top {
+        flex-direction: column;
+    }
+
+    .part-meta {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .part-card {
+        padding: 16px;
+    }
+
+    .details-card {
+        padding: 20px;
+    }
+
+    .details-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .goal-details-title-row {
+        gap: 12px;
+    }
+
+    .goal-details-icon {
+        width: 46px;
+        height: 46px;
+        font-size: 22px;
+    }
+
+    .timeline-title {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE - SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 450px) {
+
+    .goal-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .progress-summary {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .part-actions {
+        flex-wrap: wrap;
+    }
+
+    .add-part-btn {
+        width: 100%;
+    }
+}

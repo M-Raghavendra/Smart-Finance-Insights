@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | Smart Finance Insights</title>
+
+    <style>
+
+        body{
+            margin:0;
+            font-family:Arial,sans-serif;
+            background:#f4f6f9;
+        }
+
+        .navbar{
+            background:#2563eb;
+            color:white;
+            padding:18px 40px;
+        }
+
+        .container{
+            width:700px;
+            min-height:720px;
+            margin:40px auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 5px 15px rgba(0,0,0,.1);
+            box-sizing:border-box;
+        }
+        .profile-header{
+
+    text-align:center;
+    margin-bottom:35px;
+
+}
+
+.profile-avatar{
+
+    margin-bottom:15px;
+
+}
+
+.profile-avatar img{
+
+    width:120px;
+    height:120px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:5px solid #2563eb;
+
+}
+
+.default-avatar{
+
+    width:120px;
+    height:120px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:48px;
+
+    font-weight:bold;
+
+}
+
+.profile-header h2{
+
+    margin:8px 0;
+
+    color:#111827;
+
+    font-size:30px;
+
+}
+
+.profile-header p{
+
+    color:#64748B;
+
+    margin-bottom:25px;
+
+}
+
+        .tabs{
+            display:flex;
+            gap:15px;
+            margin-bottom:25px;
+        }
+
+        .tab-btn{
+            text-decoration:none;
+            padding:10px 18px;
+            background:#e5e7eb;
+            color:#333;
+            border-radius:6px;
+            font-weight:bold;
+            transition:.3s;
+        }
+
+        .tab-btn:hover{
+            background:#2563eb;
+            color:white;
+        }
+
+        .tab-btn.active{
+            background:#2563eb;
+            color:white;
+        }
+
+        h2{
+            margin-top:0;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        }
+
+        table td{
+            padding:14px 10px;
+            border-bottom:1px solid #ddd;
+        }
+
+        table td:first-child{
+            width:220px;
+            font-weight:bold;
+        }
+
+        input,
+        select{
+            width:100%;
+            padding:10px;
+            margin:8px 0 18px;
+            border:1px solid #ccc;
+            border-radius:5px;
+            box-sizing:border-box;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            background:#2563eb;
+            color:white;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+            font-size:15px;
+        }
+
+        button:hover{
+            background:#1d4ed8;
+        }
+
+        .action-buttons{
+            display:flex;
+            gap:15px;
+            margin-top:25px;
+        }
+        .flash-success{
+    padding:12px;
+    margin-bottom:20px;
+    border-radius:5px;
+    color:white;
+    background:#16a34a;
+}
+
+    .flash-danger{
+    padding:12px;
+    margin-bottom:20px;
+    border-radius:5px;
+    color:white;
+    background:#dc2626;
+}
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+    <h2>Smart Finance Insights - My Profile</h2>
+</div>
+
+<div class="container">
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+
+            {% if category == "success" %}
+                <div class="flash-success">
+            {% else %}
+                <div class="flash-danger">
+            {% endif %}
+
+                {{ message }}
+
+                </div>
+
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<div class="profile-header">
+
+    <div class="profile-avatar">
+
+        {% if profile and profile.profile_photo %}
+
+        <img
+            src="{{ url_for('static', filename='uploads/profile/' + profile.profile_photo) }}"
+            alt="Profile">
+
+        {% else %}
+
+        <div class="default-avatar">
+            {{ user.full_name[0]|upper }}
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <h2>{{ user.full_name }}</h2>
+
+    <p>
+        Manage your personal information and financial preferences.
+    </p>
+
+</div>
+
+    <div class="tabs">
+
+        <a href="{{ url_for('profile.view_profile') }}"
+           class="tab-btn {% if mode != 'edit' %}active{% endif %}">
+            View Profile
+        </a>
+
+        <a href="{{ url_for('profile.view_profile', mode='edit') }}"
+           class="tab-btn {% if mode == 'edit' %}active{% endif %}">
+            Edit Profile
+        </a>
+
+    </div>
+
+
+{% if mode == 'edit' or not profile %}
+
+<h2>Edit Profile</h2>
+
+<form action="{{ url_for('profile.save_profile') }}"
+      method="POST"
+      enctype="multipart/form-data">
+
+<label>Profile Photo</label>
+
+<input
+type="file"
+name="profile_photo"
+accept=".jpg,.jpeg,.png">
+
+<label>Organization Name</label>
+<input
+type="text"
+name="organization_name"
+value="{{ profile.organization_name if profile else '' }}">
+
+<label>Mobile Number</label>
+<input type="text"
+name="mobile_number"
+value="{{ profile.mobile_number if profile else '' }}">
+
+<label>Occupation</label>
+<input type="text"
+name="occupation"
+value="{{ profile.occupation if profile else '' }}">
+
+<label>Income Source</label>
+<input type="text"
+name="income_source"
+value="{{ profile.income_source if profile else '' }}">
+
+<label>Monthly Income</label>
+<input type="number"
+name="monthly_income"
+value="{{ profile.monthly_income if profile else '' }}">
+
+<label>Monthly Target</label>
+<input type="number"
+name="monthly_target"
+value="{{ profile.monthly_target if profile else '' }}">
+
+<label>Currency</label>
+
+<select name="currency">
+
+<option value="INR"
+{% if profile and profile.currency=="INR" %}selected{% endif %}>
+INR (₹)
+</option>
+
+<option value="USD"
+{% if profile and profile.currency=="USD" %}selected{% endif %}>
+USD ($)
+</option>
+
+<option value="EUR"
+{% if profile and profile.currency=="EUR" %}selected{% endif %}>
+EUR (€)
+</option>
+
+</select>
+
+<label>Date of Birth</label>
+
+<input
+type="date"
+name="dob"
+value="{{ profile.date_of_birth if profile and profile.date_of_birth else '' }}">
+
+<button type="submit">
+Save Profile
+</button>
+
+</form>
+<hr style="margin:35px 0;">
+
+<h2>Change Password</h2>
+
+<form action="{{ url_for('profile.change_password') }}" method="POST">
+
+<label>Current Password</label>
+
+<input
+type="password"
+name="current_password"
+required>
+
+<label>New Password</label>
+
+<input
+type="password"
+name="new_password"
+required>
+
+<label>Confirm New Password</label>
+
+<input
+type="password"
+name="confirm_password"
+required>
+
+<button type="submit">
+Change Password
+</button>
+
+</form>
+
+{% else %}
+
+
+<table>
+
+<tr>
+<td>Name</td>
+<td>{{ user.full_name }}</td>
+</tr>
+
+<tr>
+<td>Email</td>
+<td>{{ user.email }}</td>
+</tr>
+
+<tr>
+<td>Organization</td>
+<td>{{ profile.organization_name }}</td>
+</tr>
+
+<tr>
+<td>Mobile Number</td>
+<td>{{ profile.mobile_number }}</td>
+</tr>
+
+<tr>
+<td>Occupation</td>
+<td>{{ profile.occupation }}</td>
+</tr>
+
+<tr>
+<td>Income Source</td>
+<td>{{ profile.income_source }}</td>
+</tr>
+
+<tr>
+<td>Monthly Income</td>
+<td>{{ profile.monthly_income }}</td>
+</tr>
+
+<tr>
+<td>Monthly Target</td>
+<td>{{ profile.monthly_target }}</td>
+</tr>
+
+<tr>
+<td>Currency</td>
+<td>{{ profile.currency }}</td>
+</tr>
+
+<tr>
+<td>Date of Birth</td>
+<td>{{ profile.date_of_birth }}</td>
+</tr>
+
+</table>
+
+
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>
