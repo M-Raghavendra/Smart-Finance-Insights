@@ -2,149 +2,209 @@
 
 ## Project Overview
 
-FinSight is a comprehensive full-stack personal financial management and analytics platform built with Flask, SQLAlchemy, SQLite, and Chart.js. The platform enables users to track income, manage multi-category expenses, monitor bank and savings account balances, build budgets, manage investment portfolios, plan multi-step financial goals, receive real-time event-driven financial alerts, and view interactive smart financial dashboards.
+**FinSight** is a full-stack personal finance management and analytics platform built with Flask, SQLAlchemy, SQLite, and Chart.js. The platform enables users to track income, manage multi-category expenses, monitor bank and savings account balances, build budgets, manage investment portfolios, plan multi-step financial goals, link expenses directly with financial goals, receive automated event-driven financial alerts, and view interactive financial dashboards and reporting analytics.
+
+All analytics, charts, alerts, and insights are generated dynamically from actual database-driven financial data.
 
 ---
 
-## Milestone 1 — Core Financial Management & Reporting
+## Key Features
 
-- **User Authentication**: Secure user registration, email format validation, password hashing (Flask-Bcrypt), login, and session-protected logout (Flask-Login).
-- **User Profile**: Profile management, personal data view/update.
-- **Income Management**: Record, edit, delete, and filter income entries with source categorization.
-- **Expense Management**: Log, edit, and delete category-specific expenses linked to financial accounts.
-- **Account Synchronization**: Multi-account management (Bank, Cash, Savings) with real-time automatic balance updates upon adding, editing, or deleting expenses.
-- **Budget Tracking**: Monthly budget allocation, spent vs remaining budget calculations, and usage percentage indicators.
-- **Dashboard & Reporting**: Summary cards (Total Income, Total Expenses, Total Savings, Monthly Budget), category pie chart breakdown, monthly expense bar charts, and recent transaction history.
+### Financial Management
+- **Secure User Authentication**: User registration, email format validation, password hashing (Flask-Bcrypt), session management, and route protection (Flask-Login).
+- **Profile Management**: Personal user profile details and settings management.
+- **Income Tracking**: Record, edit, delete, and categorize income streams.
+- **Expense Tracking**: Log, edit, and delete category-specific expenses linked to accounts and financial goals.
+- **Account Management & Balance Synchronization**: Manage bank and savings accounts with automatic balance synchronization upon adding, editing, or deleting expenses.
+- **Budget Tracking**: Monthly budget allocation, spent vs. remaining budget calculations, usage percentage indicators, and budget status tracking (Healthy, Normal, Warning, Exceeded).
+- **Financial Dashboard**: Unified overview with summary cards (Total Income, Total Expenses, Net Savings, Monthly Budget), category breakdown pie charts, expense trends, and recent transaction history.
 
----
-
-## Milestone 2 — Investment Portfolio & Multi-Step Goal Planning
-
+### Financial Goals and Investments
+- **Financial Goal Planning**: Create, edit, and track short-term and long-term financial goals with target amounts, current savings, target dates, priorities, and status indicators.
+- **Goal Progress Tracking**: Automatic calculation of goal completion status, progress percentages, and remaining target amounts.
+- **Multi-Step Goal Planning (Goal Parts)**: Deconstruct complex goals into ordered sub-steps/milestones with estimated costs, actual costs, cost variances, timelines, and completion statuses.
 - **Investment Portfolio Tracking**: Track investments across instruments (Stocks, Mutual Funds, Fixed Deposits, Crypto, Gold).
-- **Asset Allocation & Returns**: Automated calculations for Total Invested Amount, Current Portfolio Value, Total Returns (₹), Return Percentage (%), and Asset Type allocation breakdown.
-- **Financial Goal Planning**: Create, edit, and track long-term and short-term financial goals with target amounts, current saved amounts, priority levels, categories, and target deadlines.
-- **Goal Progress Analytics**: Automatic goal completion status ("In Progress" vs "Completed"), progress percentages, and remaining target amount calculations.
-- **Goal Parts Breakdown**: Deconstruct complex goals into ordered sub-steps/milestones with estimated costs, actual costs, cost variances, start/completion dates, and step statuses.
+- **Portfolio Value & Returns Tracking**: Automated calculations for Total Invested Amount, Current Portfolio Value, Total Returns (₹), Return Percentage (%), and Asset Allocation breakdown.
+
+### Smart Analytics
+- **Spending Pattern Analysis**: Category-wise expense distribution, top spending category detection, and total spending summaries.
+- **Category-wise & Distribution Analysis**: Interactive doughnut and pie charts showing category breakdowns and goal-linked vs. regular expense distribution.
+- **Monthly & Historical Spending Trends**: Multi-month historical Income vs. Expense vs. Net Savings trend line charts computed dynamically from transaction dates.
+- **Weekly Spending Pattern**: Current month weekly spending breakdown across Weeks 1–5 with peak spending week identification.
+- **Current vs. Previous Month Comparison**: MoM spending differences, percentage change, transaction counts, and category shifts.
+- **Interactive Financial Charts**: Responsive Chart.js visualizations across all analytics views.
+- **Expense-to-Goal Connection & Goal-Wise Analytics**: Direct mapping of expenses to financial goals with goal-linked expense summaries, totals, averages, and trend tracking.
+- **Database-Driven Financial Insights**: Rule-based explainable insights detailing financial behavior, budget utilization, and savings rates based on real database records.
+
+### Financial Alerts
+- **Financial Event Alerts**: Automated event-driven alerts for Budget Warnings (80%), Budget Exceedances (100%), High Category Spending (>40%), Significant MoM Spending Increases (>15%), Negative Net Balances, Goal Milestones (25%, 50%, 75%, 100%), and Goal Deadlines.
+- **Alert Dashboard (`/alerts`)**: Dedicated alert management page with summary metrics (Total, Unread, Critical, Read/Resolved) and filter options (All, Unread, Budget, Goal, Spending, Critical).
+- **Mark Alerts as Read**: Interactive status toggle button to dismiss and manage alerts.
+- **Alert Deduplication**: Guarantees zero alert duplication on page refreshes and user actions.
 
 ---
 
-## Milestone 3
+## Expense-to-Goal Connection
 
-### Milestone 3 Part 1 — Implemented & Verified
+Expenses can optionally be associated with financial goals. This relationship allows the platform to track goal-related spending dynamically, integrating expense data directly into goal details and financial analytics.
 
-- **Budget ↔ Goal Connection**: Relate each monthly budget to a specific financial goal. Linked budget details appear on Goal cards and Goal detail headers; linked Goal details appear on Budget management forms. Deleting a Goal safely retains the Budget (`goal_id` set to NULL).
-- **Spending Pattern Analysis**: Real database-driven spending analytics engine calculating total income, total expenses, net savings, category-wise spending distribution, top spending category identification, and month-over-month spending percentage change.
-- **Explainable Spending Insights**: Rule-based analytics engine producing human-readable financial insights based on actual user transactions.
-- **6-Month Historical Spending Trend**: 6-month historical Income vs Expense vs Net Savings comparison chart computed directly from database transaction dates.
-- **Financial Event Alert System**: Automated detection of critical financial events including Budget Exceeded, High Category Spending (>40%), Significant Spending Increase (>15%), Negative Balance, and Approaching Goal Deadlines.
-- **Alert Deduplication & Dismissal**: Guarantees zero alert duplication on dashboard refresh and provides interactive "Mark as Read" dismissal functionality.
-- **Smart Financial Dashboard**: Unified dashboard section integrating Spending Insights, Top Categories progress bars, 6-Month Trend Chart, Budget Status, Goal Progress cards, and Financial Event Alert cards alongside existing Milestone 1 & 2 dashboard components.
-
-### Milestone 3 Remaining / Additional Requirements
-
-- **Personalized Budget Recommendations**: *Pending / Not Implemented in core engine*.
-- **Financial Health Score Calculation**: *Pending / Not Implemented in core engine*.
+- **Optional Goal Linking**: An expense can optionally be linked to a goal (`goal_id`), remain unlinked (`NULL`), or belong to a budget.
+- **One-to-Many Relationship**: A single Goal can have multiple associated Expenses.
+- **Database Persistence**: Stored via the nullable `goal_id` foreign key on the `expenses` table referencing `goals.id`.
+- **Goal Details Integration**: Goal detail views dynamically retrieve and display direct goal-linked expenses, total goal-related spending, and expense counts.
+- **Goal-Wise Analytics**: Analytics engine computes:
+  - Goal-linked expenses vs. regular non-goal expenses
+  - Total spending associated with each goal
+  - Number of linked expenses and average expense amounts
+  - Monthly goal-linked expense trend visualization
 
 ---
 
 ## Technology Stack
 
-- **Backend**: Python 3, Flask 3.0, Flask-SQLAlchemy 3.1, Flask-Login 0.6, Flask-Bcrypt 1.0, SQLAlchemy 2.0
-- **Database**: SQLite (`database/finance.db`)
-- **Frontend**: HTML5, Vanilla CSS3, JavaScript (ES6+), Jinja2 Templating, Chart.js, FontAwesome 6
-- **Architecture**: Modular Flask Blueprints, Decoupled Service Layer, Model-View-Controller (MVC) design pattern
+| Category | Technologies |
+| :--- | :--- |
+| **Backend** | Python 3, Flask, Flask-SQLAlchemy, Flask-Login, Flask-Bcrypt, SQLAlchemy |
+| **Database** | SQLite |
+| **Frontend** | HTML5, CSS3, JavaScript (ES6+), Jinja2 Templating, Chart.js, FontAwesome |
+| **Architecture** | Modular Flask Blueprints, Decoupled Service Layer, Model-View-Controller (MVC) Pattern |
 
 ---
 
 ## Project Structure
 
 ```
-M2-SFI/
-├── app.py                      # Application entry point, DB schema initializer & Smart Dashboard route
-├── config.py                   # Configuration settings & database URI
-├── extensions.py               # Flask extension initializations (db, login_manager, bcrypt)
+Smart-Finance-Insights/
+├── app.py                      # Application entry point & main controllers
+├── config.py                   # Configuration settings & database configuration
+├── extensions.py               # Extension initializations (DB, LoginManager, Bcrypt)
 ├── requirements.txt            # Project dependencies
-├── database/
-│   └── finance.db              # SQLite Database
-├── models/
-│   ├── __init__.py             # Model exports
-│   ├── user.py                 # User authentication model
-│   ├── profile.py              # User profile model
-│   ├── account.py              # Financial account model
-│   ├── income.py               # Income transaction model
-│   ├── expense.py              # Expense transaction model
+├── database/                   # SQLite database directory
+│   └── finance.db
+├── models/                     # SQLAlchemy database models
+│   ├── user.py
+│   ├── profile.py
+│   ├── account.py
+│   ├── income.py
+│   ├── expense.py              # Expense model with Account and Goal relationships
 │   ├── budget.py               # Budget model with Goal relationship
-│   ├── goal.py                 # Goal model
-│   ├── goal_part.py            # Sub-goal / Part milestone model
-│   ├── investment.py           # Investment portfolio model
-│   └── alert.py                # Financial event alert model
-├── routes/
-│   ├── auth.py                 # Login, Register, Logout routes
-│   ├── profile.py              # Profile management routes
-│   ├── account.py              # Account CRUD routes
-│   ├── income.py               # Income CRUD routes
-│   ├── expense.py              # Expense CRUD routes & account balance sync
-│   ├── budget.py               # Budget CRUD & Goal linking routes
-│   ├── goal.py                 # Goal & Goal Parts management routes
-│   └── investment.py           # Investment tracking & analytics routes
-├── services/
-│   ├── spending_analysis.py    # Spending analysis, 6-month trends & rule-based insights engine
-│   └── alert_service.py        # Event alert detector & deduplication service
-├── static/
-│   ├── css/                    # Modular layout, dashboard, budget, goal & investment stylesheets
-│   ├── images/
-│   └── uploads/
+│   ├── goal.py                 # Goal model with Expense and Budget relationships
+│   ├── goal_part.py
+│   ├── investment.py
+│   └── alert.py
+├── routes/                     # Blueprint routes
+│   ├── auth.py
+│   ├── profile.py
+│   ├── account.py
+│   ├── income.py
+│   ├── expense.py
+│   ├── budget.py
+│   ├── goal.py
+│   ├── investment.py
+│   ├── analytics.py
+│   └── alert.py
+├── services/                   # Business logic and analytics engines
+│   ├── spending_analysis.py    # Spending analytics, trends & goal-expense calculations
+│   └── alert_service.py        # Event alert detection & deduplication engine
+├── static/                     # Static assets
+│   ├── css/
+│   └── js/
 └── templates/                  # Jinja2 HTML templates
     ├── layout.html
     ├── login.html
     ├── register.html
-    ├── dashboard.html          # Smart Financial Dashboard
-    ├── budgets.html            # Budget & Goal linkage form
-    ├── goals.html              # Financial goals list
-    ├── goal_details.html       # Goal details & Goal Parts breakdown
+    ├── dashboard.html
+    ├── analytics.html
+    ├── alerts.html
     ├── expenses.html
+    ├── edit_expense.html
     ├── income.html
-    ├── accounts.html
+    ├── budgets.html
+    ├── goals.html
+    ├── goal_details.html
     ├── investments.html
+    ├── accounts.html
     └── profile.html
 ```
 
 ---
 
-## Database Schema & ORM Relationships
+## Key Database Relationships
 
-- **User**: Primary entity with 1-to-Many relationships to Accounts, Incomes, Expenses, Budgets, Goals, Investments, and FinancialAlerts.
-- **Budget → Goal**: Foreign Key `goal_id` on `budgets` table referencing `goals.id` (Nullable). Relationship `goal = db.relationship("Goal", backref=db.backref("budgets", lazy=True))`.
-- **FinancialAlert**: Stores user-specific alerts (`user_id`, `alert_type`, `title`, `message`, `severity`, `is_read`, `created_at`).
-- **Goal → GoalPart**: 1-to-Many cascade relationship (`all, delete-orphan`).
-- **Expense → Account**: Foreign Key `account_id` referencing `accounts.id` with balance synchronization.
+```
+User
+├── Income
+├── Expenses
+├── Accounts
+├── Budgets
+├── Goals
+├── Investments
+└── Alerts
+
+Expense
+├── Account (Required)
+└── Goal (Optional)
+
+Budget
+└── Goal (Optional)
+
+Goal
+├── Goal Parts
+├── Expenses (Optional)
+└── Budgets (Optional)
+```
 
 ---
 
-## Security & Data Isolation
+## Security and Data Management
 
-- **Authentication**: Session-based login using Flask-Login with hashed passwords stored via Flask-Bcrypt.
-- **Multi-Tenant Data Isolation**: Every database query and service calculation explicitly filters by `current_user.id`.
-- **CSRF & Route Protection**: Route access restricted using `@login_required` decorators across all financial endpoints.
+- **Password Hashing**: Passwords are securely hashed using bcrypt prior to database storage.
+- **Authentication & Session Security**: Route access is protected using `@login_required` decorators with session management via Flask-Login.
+- **Strict Data Isolation**: Database queries and analytics engines filter records strictly by `current_user.id` to enforce user-level data privacy.
 
 ---
 
-## Testing & Verification Results
+## Screenshots
 
-Comprehensive automated and browser-level tests were executed against local database `database/finance.db` using test credentials `vicky@gmail.com`:
+- **Dashboard**: High-level financial cards, income/expense summaries, account balances, and recent transactions.
+- **Expense Management**: Categorized expense entry, account balance sync, and optional goal linking dropdown.
+- **Financial Goals**: Goal progress bars, milestone step breakdowns, and goal-linked expense tables.
+- **Financial Analytics**: Multi-tab analytics featuring spending patterns, monthly trends, budget status, and goal-wise expense charts.
+- **Alert Dashboard**: Event alert list with severity indicators, filtering, and mark-as-read controls.
 
-| Module / Feature | Status | Verification Details |
-| :--- | :--- | :--- |
-| **User Authentication** | **PASS** | Registration, Login, Session Persistence & Logout verified cleanly. |
-| **Account & Balance Sync** | **PASS** | Expense additions automatically deduct linked Account balance correctly. |
-| **Income & Expenses** | **PASS** | CRUD operations verified; multi-category transactions calculated accurately. |
-| **Investment Tracking** | **PASS** | Invested amount, current value, returns (₹ and %), and asset allocation verified. |
-| **Goal & Goal Parts** | **PASS** | Goal progress %, step order, estimated vs actual cost variance, and timeline verified. |
-| **Budget ↔ Goal Connection** | **PASS** | Goal-budget linking, UI badges, and Goal deletion non-cascade check verified. |
-| **Spending Pattern Analysis** | **PASS** | Total Income, Expenses, Savings, Top Category (Food), and MoM change verified. |
-| **6-Month Spending Trend** | **PASS** | 6-month historical Income, Expenses, and Savings arrays computed cleanly. |
-| **Financial Event Alerts** | **PASS** | Event triggers (Over budget, High spending, Goal deadline) verified. |
-| **Alert Deduplication & Dismissal**| **PASS** | Zero duplicate alerts on refresh; "Mark as Read" action verified. |
-| **Smart Dashboard UI** | **PASS** | All new Smart Financial Insights widgets integrated without breaking existing UI. |
-| **Personalized Recommendations**| **PENDING** | *Not implemented in current codebase*. |
-| **Financial Health Score** | **PENDING** | *Not implemented in current codebase*. |
+---
+
+## How to Run
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/M-Raghavendra/Smart-Finance-Insights.git
+cd Smart-Finance-Insights
+```
+
+### 2. Create a virtual environment
+```bash
+python -m venv .venv
+```
+
+### 3. Activate the virtual environment
+- **Windows**:
+  ```cmd
+  .venv\Scripts\activate
+  ```
+- **macOS / Linux**:
+  ```bash
+  source .venv/bin/activate
+  ```
+
+### 4. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Run the application
+```bash
+python app.py
+```
+
+Open your browser and navigate to `http://127.0.0.1:5000` to use the application.
