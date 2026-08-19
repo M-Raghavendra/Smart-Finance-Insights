@@ -78,6 +78,18 @@ Expense Management
                 </select>
             </div>
 
+            <!-- Optional Linked Financial Goal -->
+            <div class="form-group">
+                <label>Linked Financial Goal (Optional)</label>
+
+                <select name="goal_id">
+                    <option value="none">None / No Goal</option>
+                    {% for g in goals %}
+                    <option value="{{ g.id }}">🎯 {{ g.goal_name }} (Target: ₹{{ "{:,.0f}".format(g.target_amount) }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
             <div class="form-group">
                 <label>Expense Date</label>
                 <input type="date" name="expense_date" required>
@@ -109,6 +121,7 @@ Expense Management
                 <th>Date</th>
                 <th>Title</th>
                 <th>Category</th>
+                <th>Linked Goal</th>
                 <th>Amount</th>
                 <th>Payment</th>
                 <th>Account</th>
@@ -127,6 +140,15 @@ Expense Management
                     <td>{{ expense.expense_date }}</td>
                     <td>{{ expense.title }}</td>
                     <td>{{ expense.category }}</td>
+                    <td>
+                        {% if expense.goal %}
+                            <span style="background: #EFF6FF; color: #2563EB; padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 12px; border: 1px solid #BFDBFE; display: inline-block;">
+                                🎯 {{ expense.goal.goal_name }}
+                            </span>
+                        {% else %}
+                            <span style="color: #94A3B8; font-size: 12px;">None</span>
+                        {% endif %}
+                    </td>
                     <td>₹{{ "%.2f"|format(expense.amount) }}</td>
                     <td>{{ expense.payment_method }}</td>
                     <td>{{ expense.account.account_name }}</td>
@@ -154,7 +176,7 @@ Expense Management
 
                 <tr>
 
-                    <td colspan="7" class="no-data">
+                    <td colspan="8" class="no-data">
                         No expenses added yet.
                     </td>
 

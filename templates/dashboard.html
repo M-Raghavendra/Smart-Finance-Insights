@@ -150,6 +150,64 @@ Dashboard Overview
 
 </div>
 
+<!-- Goal-Linked Expense Smart Cards -->
+{% if goal_expense_analytics %}
+<div class="dashboard-cards" style="margin-top: 16px;">
+
+    <!-- Total Goal-Linked Expenses -->
+    <div class="card" style="border-left: 4px solid #2563EB;">
+        <div class="card-icon" style="background: #EFF6FF; color: #2563EB;">
+            <i class="fas fa-receipt"></i>
+        </div>
+        <div class="card-info">
+            <h4>🎯 Goal-Linked Expenses</h4>
+            <h2>₹{{ "{:,.0f}".format(goal_expense_analytics.total_all_goal_linked) }}</h2>
+        </div>
+    </div>
+
+    <!-- Goals with Related Expenses -->
+    <div class="card" style="border-left: 4px solid #16A34A;">
+        <div class="card-icon" style="background: #F0FDF4; color: #16A34A;">
+            <i class="fas fa-bullseye"></i>
+        </div>
+        <div class="card-info">
+            <h4>Goals with Expenses</h4>
+            <h2>{{ goal_expense_analytics.goals_with_expenses_count }}</h2>
+        </div>
+    </div>
+
+    <!-- Most Expensive Goal -->
+    <div class="card" style="border-left: 4px solid #D97706;">
+        <div class="card-icon" style="background: #FFFBEB; color: #D97706;">
+            <i class="fas fa-crown"></i>
+        </div>
+        <div class="card-info">
+            <h4>Most Expensive Goal</h4>
+            <h2 style="font-size: 18px;">{{ goal_expense_analytics.most_expensive_goal_name }}</h2>
+            <span style="font-size: 12px; color: #64748B;">₹{{ "{:,.0f}".format(goal_expense_analytics.most_expensive_goal_amt) }}</span>
+        </div>
+    </div>
+
+    <!-- Most Recent Goal Expense -->
+    <div class="card" style="border-left: 4px solid #8B5CF6;">
+        <div class="card-icon" style="background: #F3E8FF; color: #8B5CF6;">
+            <i class="fas fa-clock"></i>
+        </div>
+        <div class="card-info">
+            <h4>Most Recent Goal Expense</h4>
+            <h2 style="font-size: 16px;">
+                {% if goal_expense_analytics.latest_goal_expense %}
+                    {{ goal_expense_analytics.latest_goal_expense.title }} (₹{{ "{:,.0f}".format(goal_expense_analytics.latest_goal_expense.amount) }})
+                {% else %}
+                    None
+                {% endif %}
+            </h2>
+        </div>
+    </div>
+
+</div>
+{% endif %}
+
 <!-- Financial Summary -->
 
 <div class="dashboard-box">

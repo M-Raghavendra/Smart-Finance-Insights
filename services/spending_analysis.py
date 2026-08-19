@@ -624,3 +624,91 @@ def get_rebuilt_analytics_data(user_id):
         "budget_recommendations": budget_recommendations,
         "ai_insights": ai_insights
     }
+
+
+def get_goal_expense_analytics(user_id):
+    """
+    Computes real Expense-to-Goal Analytics:
+    1. Per Goal Expense Metrics (Total linked expenses, Count, Avg amount, Latest date)
+    2. Goal vs Expense Visualizations (Goal-Linked Expenses by Goal, Goal-linked vs Regular Non-goal expenses)
+    3. Monthly Goal-Linked Expense Trend (Last 6 Months)
+    4. Smart Dashboard Goal-Expense metrics
+    """
+    today = date.today()
+    goals = Goal.query.filter_by(user_id=user_id).all()
+    all_expenses = Expense.query.filter_by(user_id=user_id).all()
+
+    goal_analysis_list = []
+    goal_names = []
+    goal_linked_totals = []
+    total_all_goal_linked = 0.0
+
+    most_expensive_goal_name = "None"
+    max_goal_expense_amt = -1.0
+    latest_goal_expense_obj = None
+
+    for g in goals:
+        linked_exp = [e for e in all_expenses if e.goal_id == g.id]
+        linked_exp.sort(key=lambda x: x.expense_date or date.min, reverse=True)
+
+        total_amt = sum(e.amount for e in linked_exp)
+        count_exp = len(linked_exp)
+        avg_amt = round(total_amt / count_exp, 2) if count_exp > 0 else 0.0
+        latest_date_str = linked_exp[0].expense_date.strftime("%d %b %Y") if count_exp > 0 and linked_exp[0].expense_date else "N/A"
+
+        if count_exp > 0:
+            if not latest_goal_expense_obj or (linked_exp[0].expense_date and linked_exp[0].expense_date > (latest_goal_expense_obj.expense_date or date.min)):
+                latest_goal_expense_obj = linked_exp[0]
+
+        if total_amt > max_goal_expense_amt and total_amt > 0:
+            max_goal_expense_amt = total_amt
+            most_expensive_goal_name = g.goal_name
+
+        total_all_goal_linked += total_amt
+
+        goal_analysis_list.append({
+            "goal": g,
+            "total_expenses": total_amt,
+            "count_expenses": count_exp,
+            "avg_expense": avg_amt,
+            "latest_date": latest_date_str
+        })
+
+        if total_amt > 0 or len(goals) <= 5:
+            goal_names.append(g.goal_name)
+            goal_linked_totals.append(float(total_amt))
+
+    total_all_expenses = sum(e.amount for e in all_expenses)
+    total_regular_expenses = max(0.0, total_all_expenses - total_all_goal_linked)
+
+    goals_with_expenses_count = sum(1 for item in goal_analysis_list if item["count_expenses"] > 0)
+
+    # Monthly Goal-Linked Expense Trend (Last 6 Months)
+    month_labels = []
+    monthly_goal_expenses = []
+    for i in range(5, -1, -1):
+        m_start = get_first_day_of_month(today, i)
+        m_end = get_last_day_of_month(m_start)
+        m_label = m_start.strftime("%b %Y")
+        
+        m_sum = sum(
+            e.amount for e in all_expenses
+            if e.goal_id and e.expense_date and m_start <= e.expense_date <= m_end
+        )
+        month_labels.append(m_label)
+        monthly_goal_expenses.append(float(m_sum))
+
+    return {
+        "goal_analysis_list": goal_analysis_list,
+        "goal_names": goal_names,
+        "goal_linked_totals": goal_linked_totals,
+        "total_all_goal_linked": float(total_all_goal_linked),
+        "total_regular_expenses": float(total_regular_expenses),
+        "total_all_expenses": float(total_all_expenses),
+        "goals_with_expenses_count": goals_with_expenses_count,
+        "most_expensive_goal_name": most_expensive_goal_name,
+        "most_expensive_goal_amt": float(max_goal_expense_amt) if max_goal_expense_amt > 0 else 0.0,
+        "latest_goal_expense": latest_goal_expense_obj,
+        "monthly_trend_labels": month_labels,
+        "monthly_trend_amounts": monthly_goal_expenses
+    }

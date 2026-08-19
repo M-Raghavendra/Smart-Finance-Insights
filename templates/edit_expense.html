@@ -84,6 +84,20 @@ Edit Expense
 
         </div>
 
+        <!-- Optional Linked Goal Selection -->
+        <div class="form-group">
+            <label>Linked Financial Goal (Optional)</label>
+
+            <select name="goal_id">
+                <option value="none" {% if not expense.goal_id %}selected{% endif %}>None / No Goal</option>
+                {% for g in goals %}
+                <option value="{{ g.id }}" {% if expense.goal_id == g.id %}selected{% endif %}>
+                    🎯 {{ g.goal_name }} (Target: ₹{{ "{:,.0f}".format(g.target_amount) }})
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
         <div class="form-group">
             <label>Date</label>
             <input
