@@ -11,7 +11,8 @@ from services.spending_analysis import (
     get_monthly_spending_trend,
     get_advanced_spending_patterns,
     get_rebuilt_analytics_data,
-    get_goal_expense_analytics
+    get_goal_expense_analytics,
+    calculate_financial_health_score
 )
 from services.alert_service import check_and_create_alerts, get_user_alerts
 
@@ -33,6 +34,7 @@ def analytics():
     cash_flow_trend = get_monthly_spending_trend(user_id, num_months=6)
     advanced_patterns = get_advanced_spending_patterns(user_id)
     goal_expense_analytics = get_goal_expense_analytics(user_id)
+    health_score = calculate_financial_health_score(user_id)
 
     # 3. Budget Analytics & Linked Goal Relationships
     budgets = Budget.query.filter_by(user_id=user_id).all()
@@ -136,5 +138,6 @@ def analytics():
         goal_analytics_list=goal_analytics_list,
         completed_count=completed_count,
         active_count=active_count,
-        near_completion_count=near_completion_count
+        near_completion_count=near_completion_count,
+        health_score=health_score
     )

@@ -66,32 +66,6 @@ Dashboard Overview
 
 </div>
 
-<!-- =========================================================
-     MILESTONE 3: FINANCIAL EVENT ALERTS SYSTEM
-========================================================= -->
-
-{% if alerts %}
-<div class="smart-alerts-container">
-    {% for alert in alerts %}
-        <div class="alert-item {{ alert.severity }}">
-            <div class="alert-content">
-                <strong>
-                    {% if alert.severity == 'danger' %}🚨
-                    {% elif alert.severity == 'warning' %}⚠️
-                    {% elif alert.severity == 'info' %}ℹ️
-                    {% else %}✅{% endif %}
-                    {{ alert.title }}
-                </strong>
-                <span>{{ alert.message }}</span>
-            </div>
-            <form method="POST" action="{{ url_for('mark_alert_read', alert_id=alert.id) }}">
-                <button type="submit" class="btn-dismiss-alert">Mark as Read</button>
-            </form>
-        </div>
-    {% endfor %}
-</div>
-{% endif %}
-
 <!-- Dashboard Cards -->
 
 <div class="dashboard-cards">

@@ -178,12 +178,57 @@ Finance Analytics Platform for Financial Reporting and Budget Tracking
         <button class="tab-btn" onclick="switchTab('spending')"><i class="fa-solid fa-chart-pie"></i> Spending Analysis</button>
         <button class="tab-btn" onclick="switchTab('recommendations')"><i class="fa-solid fa-lightbulb"></i> Budget Recommendations</button>
         <button class="tab-btn" onclick="switchTab('trends')"><i class="fa-solid fa-arrow-trend-up"></i> Trends & Predictions</button>
+        <button class="tab-btn" onclick="switchTab('health')"><i class="fa-solid fa-shield-halved"></i> Financial Health Score</button>
     </div>
 
     <!-- =========================================================
          TAB 1: OVERVIEW
     ========================================================= -->
     <div id="tab-overview" class="tab-content active">
+
+        <!-- FINANCIAL HEALTH SCORE CARD -->
+        {% if health_score %}
+        <div class="section-card" style="border-left: 5px solid {% if health_score.score >= 80 %}#16A34A{% elif health_score.score >= 60 %}#2563EB{% elif health_score.score >= 40 %}#D97706{% else %}#DC2626{% endif %};">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div style="width: 65px; height: 65px; border-radius: 50%; background: {% if health_score.score >= 80 %}#DCFCE7{% elif health_score.score >= 60 %}#DBEAFE{% elif health_score.score >= 40 %}#FEF3C7{% else %}#FEE2E2{% endif %}; color: {% if health_score.score >= 80 %}#16A34A{% elif health_score.score >= 60 %}#2563EB{% elif health_score.score >= 40 %}#D97706{% else %}#DC2626{% endif %}; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 800; line-height: 1;">
+                        <span style="font-size: 20px;">{{ health_score.score }}</span>
+                        <span style="font-size: 10px; opacity: 0.8;">/ 100</span>
+                    </div>
+                    <div>
+                        <h2 style="font-size: 18px; margin: 0 0 4px 0; color: #0F172A; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-shield-halved" style="color: #2563EB;"></i> Dynamic Financial Health Score
+                            <span class="badge-status {% if health_score.score >= 80 %}healthy{% elif health_score.score >= 60 %}normal{% elif health_score.score >= 40 %}warning{% else %}exceeded{% endif %}">
+                                {{ health_score.status_label }}
+                            </span>
+                        </h2>
+                        <p style="margin: 0; font-size: 13px; color: #64748B;">{{ health_score.summary_explanation }}</p>
+                    </div>
+                </div>
+                <div style="min-width: 180px; flex-grow: 1; max-width: 240px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: #64748B; margin-bottom: 6px;">
+                        <span>Health Index Gauge</span>
+                        <strong>{{ health_score.score }}%</strong>
+                    </div>
+                    <div style="width: 100%; height: 10px; background: #E2E8F0; border-radius: 10px; overflow: hidden;">
+                        <div style="height: 100%; width: {{ health_score.score }}%; background: {% if health_score.score >= 80 %}#16A34A{% elif health_score.score >= 60 %}#2563EB{% elif health_score.score >= 40 %}#D97706{% else %}#DC2626{% endif %}; border-radius: 10px; transition: width 0.5s ease;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #E2E8F0;">
+                {% for pillar in health_score.breakdown %}
+                <div style="background: #F8FAFC; padding: 10px 14px; border-radius: 8px; border: 1px solid #F1F5F9;">
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                        <strong style="color: #334155;">{{ pillar.pillar }}</strong>
+                        <span style="font-weight: 700; color: #2563EB;">{{ pillar.score }}/{{ pillar.max_score }}</span>
+                    </div>
+                    <p style="margin: 0; font-size: 11px; color: #64748B;">{{ pillar.note }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
 
         <!-- 1. TOP 4 OVERVIEW SUMMARY CARDS -->
         <div class="grid-4col">
@@ -602,6 +647,176 @@ Finance Analytics Platform for Financial Reporting and Budget Tracking
                 <canvas id="trendsCashFlowChart"></canvas>
             </div>
         </div>
+
+    </div>
+
+    <!-- =========================================================
+         TAB 5: FINANCIAL HEALTH SCORE DASHBOARD
+    ========================================================= -->
+    <div id="tab-health" class="tab-content">
+
+        <!-- 1. OVERALL SCORE HERO CARD -->
+        {% if health_score %}
+        <div class="section-card" style="border-left: 6px solid {% if health_score.score >= 80 %}#16A34A{% elif health_score.score >= 60 %}#2563EB{% elif health_score.score >= 40 %}#D97706{% else %}#DC2626{% endif %};">
+            <div class="section-card-header">
+                <h2><i class="fa-solid fa-shield-halved" style="color: #2563EB;"></i> Overall Financial Health Score</h2>
+                <span class="badge-status {% if health_score.score >= 80 %}healthy{% elif health_score.score >= 60 %}normal{% elif health_score.score >= 40 %}warning{% else %}exceeded{% endif %}">
+                    Status: {{ health_score.status_label }}
+                </span>
+            </div>
+
+            <div class="grid-2col" style="align-items: center; margin-bottom: 20px;">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div style="width: 90px; height: 90px; border-radius: 50%; background: {% if health_score.score >= 80 %}#DCFCE7{% elif health_score.score >= 60 %}#DBEAFE{% elif health_score.score >= 40 %}#FEF3C7{% else %}#FEE2E2{% endif %}; color: {% if health_score.score >= 80 %}#16A34A{% elif health_score.score >= 60 %}#2563EB{% elif health_score.score >= 40 %}#D97706{% else %}#DC2626{% endif %}; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 850; line-height: 1;">
+                        <span style="font-size: 30px;">{{ health_score.score }}</span>
+                        <span style="font-size: 11px; opacity: 0.85;">out of 100</span>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0 0 6px 0; font-size: 20px; color: #0F172A;">
+                            Health Rating: {{ health_score.status_label }}
+                        </h3>
+                        <p style="margin: 0; font-size: 14px; color: #475569; line-height: 1.5;">{{ health_score.summary_explanation }}</p>
+                    </div>
+                </div>
+
+                <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; color: #64748B; margin-bottom: 8px;">
+                        <span>Visual Score Index Gauge</span>
+                        <strong style="color: #0F172A; font-size: 15px;">{{ health_score.score }} / 100</strong>
+                    </div>
+                    <div style="width: 100%; height: 14px; background: #E2E8F0; border-radius: 12px; overflow: hidden; position: relative;">
+                        <div style="height: 100%; width: {{ health_score.score }}%; background: {% if health_score.score >= 80 %}#16A34A{% elif health_score.score >= 60 %}#2563EB{% elif health_score.score >= 40 %}#D97706{% else %}#DC2626{% endif %}; border-radius: 12px; transition: width 0.6s ease;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94A3B8; margin-top: 6px;">
+                        <span>0 (At Risk)</span>
+                        <span>40 (Needs Attention)</span>
+                        <span>60 (Stable)</span>
+                        <span>80+ (Excellent)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 5 COMPONENT SCORE CARDS -->
+        <div class="section-card">
+            <div class="section-card-header">
+                <h2><i class="fa-solid fa-list-check"></i> Component Score Breakdown</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                <!-- Savings Score -->
+                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 16px; border-radius: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <strong style="font-size: 14px; color: #0F172A;"><i class="fa-solid fa-piggy-bank" style="color: #16A34A;"></i> Savings Health</strong>
+                        <span style="font-size: 15px; font-weight: 700; color: #16A34A;">{{ health_score.savings_score }}/25</span>
+                    </div>
+                    <p style="margin: 0; font-size: 12px; color: #64748B;">{{ health_score.breakdown[0].note }}</p>
+                </div>
+
+                <!-- Budget Score -->
+                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 16px; border-radius: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <strong style="font-size: 14px; color: #0F172A;"><i class="fa-solid fa-bullseye" style="color: #2563EB;"></i> Budget Health</strong>
+                        <span style="font-size: 15px; font-weight: 700; color: #2563EB;">{{ health_score.budget_score }}/25</span>
+                    </div>
+                    <p style="margin: 0; font-size: 12px; color: #64748B;">{{ health_score.breakdown[1].note }}</p>
+                </div>
+
+                <!-- Goal Progress Score -->
+                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 16px; border-radius: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <strong style="font-size: 14px; color: #0F172A;"><i class="fa-solid fa-trophy" style="color: #D97706;"></i> Goal Progress</strong>
+                        <span style="font-size: 15px; font-weight: 700; color: #D97706;">{{ health_score.goal_score }}/20</span>
+                    </div>
+                    <p style="margin: 0; font-size: 12px; color: #64748B;">{{ health_score.breakdown[2].note }}</p>
+                </div>
+
+                <!-- Spending Health Score -->
+                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 16px; border-radius: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <strong style="font-size: 14px; color: #0F172A;"><i class="fa-solid fa-chart-pie" style="color: #8B5CF6;"></i> Spending Health</strong>
+                        <span style="font-size: 15px; font-weight: 700; color: #8B5CF6;">{{ health_score.spending_score }}/15</span>
+                    </div>
+                    <p style="margin: 0; font-size: 12px; color: #64748B;">{{ health_score.breakdown[3].note }}</p>
+                </div>
+
+                <!-- Risk / Alert Score -->
+                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 16px; border-radius: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <strong style="font-size: 14px; color: #0F172A;"><i class="fa-solid fa-shield-cat" style="color: #EC4899;"></i> Risk & Alerts</strong>
+                        <span style="font-size: 15px; font-weight: 700; color: #EC4899;">{{ health_score.risk_score }}/15</span>
+                    </div>
+                    <p style="margin: 0; font-size: 12px; color: #64748B;">{{ health_score.breakdown[4].note }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. POSITIVE FACTORS & AREAS FOR IMPROVEMENT -->
+        <div class="grid-2col">
+            <!-- Positive Financial Factors -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <h2><i class="fa-solid fa-circle-check" style="color: #16A34A;"></i> Positive Financial Factors</h2>
+                </div>
+                {% if health_score.positive_factors %}
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        {% for pos in health_score.positive_factors %}
+                        <div style="background: #F0FDF4; border-left: 4px solid #16A34A; padding: 12px 16px; border-radius: 8px; font-size: 13px; color: #15803D;">
+                            <i class="fa-solid fa-check-double" style="margin-right: 6px;"></i> {{ pos }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p style="font-size: 13px; color: #64748B;">No major positive factors recorded yet.</p>
+                {% endif %}
+            </div>
+
+            <!-- Areas Needing Improvement -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <h2><i class="fa-solid fa-circle-exclamation" style="color: #D97706;"></i> Areas Needing Improvement</h2>
+                </div>
+                {% if health_score.areas_for_improvement %}
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        {% for area in health_score.areas_for_improvement %}
+                        <div style="background: #FFFBEB; border-left: 4px solid #D97706; padding: 12px 16px; border-radius: 8px; font-size: 13px; color: #B45309;">
+                            <i class="fa-solid fa-triangle-exclamation" style="margin-right: 6px;"></i> {{ area }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div style="background: #F0FDF4; border-left: 4px solid #16A34A; padding: 14px 16px; border-radius: 8px; font-size: 13px; color: #15803D;">
+                        🎉 Outstanding! No critical areas requiring immediate improvement.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- 4. DYNAMIC RECOMMENDATIONS TO IMPROVE SCORE -->
+        <div class="section-card">
+            <div class="section-card-header">
+                <h2><i class="fa-solid fa-lightbulb" style="color: #2563EB;"></i> Dynamic Recommendations to Improve Score</h2>
+                <span class="badge badge-info">Actionable Score Optimizer</span>
+            </div>
+            {% if health_score.recommendations %}
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+                    {% for rec in health_score.recommendations %}
+                    <div style="background: #EFF6FF; border: 1px solid #BFDBFE; padding: 16px; border-radius: 10px; color: #1E40AF;">
+                        <h4 style="margin: 0 0 6px 0; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-arrow-up-right-dots"></i> Score Booster Action
+                        </h4>
+                        <p style="margin: 0; font-size: 13px; color: #1E3A8A; line-height: 1.5;">{{ rec }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div style="background: #F0FDF4; border: 1px solid #BBF7D0; padding: 16px; border-radius: 10px; color: #15803D;">
+                    <h4 style="margin: 0 0 4px 0; font-size: 14px;">🌟 Peak Financial Performance</h4>
+                    <p style="margin: 0; font-size: 13px;">Your financial health score is already at maximum potential. Continue maintaining current savings and budget discipline!</p>
+                </div>
+            {% endif %}
+        </div>
+
+        {% endif %}
 
     </div>
 

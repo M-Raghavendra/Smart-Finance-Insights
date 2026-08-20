@@ -20,7 +20,7 @@ Budget Management
 
         <h2>Monthly Budget</h2>
 
-        <form method="POST">
+        <form id="budget-form" method="POST" action="{{ url_for('budget.budgets') }}">
 
             <div class="form-group">
                 <label>Budget Amount (₹)</label>
@@ -65,23 +65,23 @@ Budget Management
                 </select>
             </div>
 
-            <div class="budget-actions">
-                <button type="submit" class="btn-save">
-                    {% if budget %}
-                        Update Budget
-                    {% else %}
-                        Save Budget
-                    {% endif %}
-                </button>
-
-                {% if budget %}
-                    <form method="POST" action="{{ url_for('budget.delete_budget', id=budget.id) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this budget?');">
-                        <button type="submit" class="btn-delete">Delete Budget</button>
-                    </form>
-                {% endif %}
-            </div>
-
         </form>
+
+        <div class="budget-actions">
+            <button type="submit" form="budget-form" class="btn-save">
+                {% if budget %}
+                    Update Budget
+                {% else %}
+                    Save Budget
+                {% endif %}
+            </button>
+
+            {% if budget %}
+                <form method="POST" action="{{ url_for('budget.delete_budget', id=budget.id) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this budget?');">
+                    <button type="submit" class="btn-delete">Delete Budget</button>
+                </form>
+            {% endif %}
+        </div>
 
         {% if budget and budget.goal %}
             <div class="linked-goal-badge">

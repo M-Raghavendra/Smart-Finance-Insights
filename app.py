@@ -14,7 +14,7 @@ from models.account import Account
 from models.goal import Goal
 from models.alert import FinancialAlert
 
-from services.spending_analysis import get_spending_analysis, get_monthly_spending_trend, get_goal_expense_analytics
+from services.spending_analysis import get_spending_analysis, get_monthly_spending_trend, get_goal_expense_analytics, calculate_financial_health_score
 from services.alert_service import check_and_create_alerts, get_user_alerts, mark_alert_as_read
 
 from routes.auth import auth
@@ -193,9 +193,8 @@ def dashboard():
     # 2. 6-Month Income vs Expense vs Savings Trend
     spending_trend = get_monthly_spending_trend(current_user.id, num_months=6)
 
-    # 3. Financial Event Alerts
+    # 3. Financial Event Alerts Evaluation
     check_and_create_alerts(current_user.id)
-    alerts = get_user_alerts(current_user.id, include_read=False)
 
     # 4. Expense-to-Goal Relationship Analytics
     goal_expense_analytics = get_goal_expense_analytics(current_user.id)
@@ -219,8 +218,7 @@ def dashboard():
         goals=goals,
         spending_analysis=spending_analysis,
         spending_trend=spending_trend,
-        goal_expense_analytics=goal_expense_analytics,
-        alerts=alerts
+        goal_expense_analytics=goal_expense_analytics
     )
 
 
