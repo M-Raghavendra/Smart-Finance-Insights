@@ -34,7 +34,14 @@ def alerts():
     elif active_filter == "goal":
         filtered_alerts = [a for a in all_user_alerts if "goal" in a.alert_type.lower() or "goal" in a.title.lower()]
     elif active_filter == "spending":
-        filtered_alerts = [a for a in all_user_alerts if "spending" in a.alert_type.lower() or "spending" in a.title.lower()]
+        filtered_alerts = [
+            a for a in all_user_alerts
+            if "spending" in a.alert_type.lower()
+            or "spending" in a.title.lower()
+            or "low_savings" in a.alert_type.lower()
+            or "savings" in a.title.lower()
+            or "balance" in a.title.lower()
+        ]
     elif active_filter == "critical":
         filtered_alerts = [a for a in all_user_alerts if a.severity in ["danger", "critical"]]
     else:

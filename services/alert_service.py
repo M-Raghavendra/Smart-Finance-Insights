@@ -57,13 +57,23 @@ def check_and_create_alerts(user_id):
 
     for b in budgets:
         if b.goal and b.goal.category:
-            b_cat_label = f"{b.goal.category} Budget"
             cat_key = b.goal.category.lower()
-            total_spent = sum(e.amount for e in curr_m_exp if e.category.lower() == cat_key)
+            cat_spent = sum(e.amount for e in curr_m_exp if e.category.lower() == cat_key)
+            if b.monthly_budget > 0 and (cat_spent / b.monthly_budget) >= 0.8:
+                b_cat_label = f"{b.goal.category} Budget"
+                total_spent = cat_spent
+            else:
+                b_cat_label = f"{b.month} {b.year} budget"
+                total_spent = sum(e.amount for e in curr_m_exp)
         elif b.monthly_budget in category_budget_map:
             label_name, cat_key = category_budget_map[b.monthly_budget]
-            b_cat_label = f"{label_name} budget"
-            total_spent = sum(e.amount for e in curr_m_exp if e.category.lower() == cat_key.lower())
+            cat_spent = sum(e.amount for e in curr_m_exp if e.category.lower() == cat_key.lower())
+            if b.monthly_budget > 0 and (cat_spent / b.monthly_budget) >= 0.8:
+                b_cat_label = f"{label_name} budget"
+                total_spent = cat_spent
+            else:
+                b_cat_label = f"{b.month} {b.year} budget"
+                total_spent = sum(e.amount for e in curr_m_exp)
         else:
             b_cat_label = f"{b.month} {b.year} budget"
             total_spent = sum(e.amount for e in curr_m_exp)
