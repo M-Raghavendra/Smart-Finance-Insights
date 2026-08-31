@@ -4,7 +4,8 @@ from flask_login import login_required, current_user
 from sqlalchemy import func, inspect, text
 
 from config import Config
-from extensions import db, login_manager, bcrypt
+from extensions import db, login_manager, bcrypt, csrf, limiter
+from flask_wtf.csrf import CSRFError
 
 from models import User
 from models.expense import Expense
@@ -27,6 +28,7 @@ from routes.investment import investment
 from routes.goal import goal
 from routes.analytics import analytics_bp
 from routes.alert import alert_bp
+from routes.reports import reports_bp
 
 app = Flask(__name__)
 
@@ -36,6 +38,17 @@ app.config.from_object(Config)
 db.init_app(app)
 login_manager.init_app(app)
 bcrypt.init_app(app)
+csrf.init_app(app)
+limiter.init_app(app)
+
+# Custom Security Error Handlers
+@app.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    return render_template("login.html", error=f"CSRF Validation Failed: {e.description}"), 400
+
+@app.errorhandler(429)
+def handle_ratelimit_error(e):
+    return render_template("login.html", error="Too many login attempts. Please wait 1 minute before trying again."), 429
 
 # Flask-Login Configuration
 login_manager.login_view = "auth.login"
@@ -50,8 +63,9 @@ def load_user(user_id):
 def inject_global_vars():
     if current_user.is_authenticated:
         unread_count = FinancialAlert.query.filter_by(user_id=current_user.id, is_read=False).count()
-        return dict(unread_alerts_count=unread_count)
-    return dict(unread_alerts_count=0)
+        recent_alerts = FinancialAlert.query.filter_by(user_id=current_user.id).order_by(FinancialAlert.created_at.desc()).limit(15).all()
+        return dict(unread_alerts_count=unread_count, global_recent_alerts=recent_alerts)
+    return dict(unread_alerts_count=0, global_recent_alerts=[])
 
 
 # Register Blueprints
@@ -65,6 +79,7 @@ app.register_blueprint(investment)
 app.register_blueprint(goal)
 app.register_blueprint(analytics_bp)
 app.register_blueprint(alert_bp)
+app.register_blueprint(reports_bp)
 
 
 # Home Page
@@ -73,12 +88,24 @@ def home():
     return redirect(url_for("auth.login"))
 
 
-# Safe Database Migration Helper
+# Safe Database Migration & Performance Indexing Helper
 def init_db_schema():
     with app.app_context():
         db.create_all()
         try:
             inspector = inspect(db.engine)
+            if "users" in inspector.get_table_names():
+                columns = [col["name"] for col in inspector.get_columns("users")]
+                if "profile_image" not in columns:
+                    with db.engine.begin() as conn:
+                        conn.execute(text("ALTER TABLE users ADD COLUMN profile_image VARCHAR(255)"))
+                if "theme_preference" not in columns:
+                    with db.engine.begin() as conn:
+                        conn.execute(text("ALTER TABLE users ADD COLUMN theme_preference VARCHAR(20) DEFAULT 'light'"))
+                else:
+                    with db.engine.begin() as conn:
+                        conn.execute(text("UPDATE users SET theme_preference = 'light' WHERE theme_preference = 'system' OR theme_preference IS NULL"))
+
             if "budgets" in inspector.get_table_names():
                 columns = [col["name"] for col in inspector.get_columns("budgets")]
                 if "goal_id" not in columns:
@@ -90,62 +117,58 @@ def init_db_schema():
                 if "goal_id" not in columns:
                     with db.engine.begin() as conn:
                         conn.execute(text("ALTER TABLE expenses ADD COLUMN goal_id INTEGER REFERENCES goals(id)"))
+
+            # Milestone 4 Performance Optimization: Add Database Indexes
+            with db.engine.begin() as conn:
+                conn.execute(text("CREATE INDEX IF NOT EXISTS idx_expenses_user_date ON expenses (user_id, expense_date)"))
+                conn.execute(text("CREATE INDEX IF NOT EXISTS idx_expenses_goal ON expenses (goal_id)"))
+                conn.execute(text("CREATE INDEX IF NOT EXISTS idx_incomes_user_date ON incomes (user_id, income_date)"))
+                conn.execute(text("CREATE INDEX IF NOT EXISTS idx_budgets_user_month_year ON budgets (user_id, month, year)"))
+                conn.execute(text("CREATE INDEX IF NOT EXISTS idx_goals_user_status ON goals (user_id, status)"))
+                conn.execute(text("CREATE INDEX IF NOT EXISTS idx_goals_target_date ON goals (target_date)"))
+                conn.execute(text("CREATE INDEX IF NOT EXISTS idx_goal_parts_goal ON goal_parts (goal_id)"))
+                conn.execute(text("CREATE INDEX IF NOT EXISTS idx_alerts_user_unread ON financial_alerts (user_id, is_read)"))
+                conn.execute(text("CREATE INDEX IF NOT EXISTS idx_accounts_user ON accounts (user_id)"))
+                conn.execute(text("CREATE INDEX IF NOT EXISTS idx_investments_user ON investments (user_id)"))
         except Exception as e:
             app.logger.warning(f"Schema check warning: {e}")
 
 
-# Dashboard
+# Initialize Database Schema & Performance Indexes on App Startup
+init_db_schema()
+
+
+# Optimized Dashboard
 @app.route("/dashboard")
 @login_required
 def dashboard():
 
-    # Get all expenses (latest first)
-    expenses = (
+    # Optimized direct SQL aggregations for totals
+    total_expenses = db.session.query(func.sum(Expense.amount)).filter_by(user_id=current_user.id).scalar() or 0.0
+    total_income = db.session.query(func.sum(Income.amount)).filter_by(user_id=current_user.id).scalar() or 0.0
+    total_account_balance = db.session.query(func.sum(Account.balance)).filter_by(user_id=current_user.id).scalar() or 0.0
+
+    # Fetch recent transactions only (Limit 5)
+    recent_transactions = (
         Expense.query
         .filter_by(user_id=current_user.id)
-        .order_by(
-            Expense.expense_date.desc(),
-            Expense.id.desc()
-        )
+        .order_by(Expense.expense_date.desc(), Expense.id.desc())
+        .limit(5)
         .all()
     )
 
-    # Latest 5 transactions
-    recent_transactions = expenses[:5]
-
-    # Get all incomes
-    incomes = Income.query.filter_by(user_id=current_user.id).all()
-
-    # Get user's budget
+    # Get user's budget, accounts, and goals
     budget_obj = Budget.query.filter_by(user_id=current_user.id).first()
-
-    # Get user's accounts
-    accounts = Account.query.filter_by(user_id=current_user.id).all()
-
-    # Get user's goals
     goals = Goal.query.filter_by(user_id=current_user.id).all()
 
-    # Calculate totals
-    total_expenses = sum(exp.amount for exp in expenses)
-    total_income = sum(inc.amount for inc in incomes)
-    total_account_balance = sum(acc.balance for acc in accounts)
-
-    # Savings
+    # Net Savings & Budget Metrics
     total_savings = total_income - total_expenses
-
-    # Budget amount
-    budget_amount = budget_obj.monthly_budget if budget_obj else 0
-
-    # Remaining budget
+    budget_amount = budget_obj.monthly_budget if budget_obj else 0.0
     remaining_budget = budget_amount - total_expenses
 
-    # Budget usage percentage
-    if budget_amount > 0:
-        budget_used = round((total_expenses / budget_amount) * 100, 2)
-    else:
-        budget_used = 0
+    budget_used = round((total_expenses / budget_amount) * 100, 2) if budget_amount > 0 else 0.0
 
-    # Expense Breakdown (Pie Chart)
+    # Expense Breakdown (Pie Chart) via SQL aggregation
     category_data = (
         db.session.query(
             Expense.category,
@@ -159,7 +182,7 @@ def dashboard():
     categories = [item[0] for item in category_data]
     amounts = [float(item[1]) for item in category_data]
 
-    # Monthly Expense Trend (Bar Chart - original)
+    # Monthly Expense Trend (Bar Chart) via SQL aggregation
     monthly_data = (
         db.session.query(
             func.strftime("%m", Expense.expense_date),
@@ -187,16 +210,9 @@ def dashboard():
     # MILESTONE 3: SMART FINANCIAL INSIGHTS & SERVICES
     # =========================================================
 
-    # 1. Spending Pattern Analysis
     spending_analysis = get_spending_analysis(current_user.id)
-
-    # 2. 6-Month Income vs Expense vs Savings Trend
     spending_trend = get_monthly_spending_trend(current_user.id, num_months=6)
-
-    # 3. Financial Event Alerts Evaluation
     check_and_create_alerts(current_user.id)
-
-    # 4. Expense-to-Goal Relationship Analytics
     goal_expense_analytics = get_goal_expense_analytics(current_user.id)
 
     return render_template(

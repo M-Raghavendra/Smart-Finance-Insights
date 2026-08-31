@@ -7,6 +7,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const data = window.analyticsData;
 
+    function getChartThemeColors() {
+        const isDark = document.documentElement.getAttribute('data-rendered-theme') === 'dark';
+        return {
+            textColor: isDark ? '#f9fafb' : '#334155',
+            gridColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)',
+            borderColor: isDark ? '#1f2937' : '#ffffff'
+        };
+    }
+
+    if (window.Chart) {
+        const tc = getChartThemeColors();
+        Chart.defaults.color = tc.textColor;
+        Chart.defaults.borderColor = tc.gridColor;
+    }
+
     const palette = [
         "#2563EB", "#16A34A", "#D97706", "#9333EA", "#06B6D4",
         "#EC4899", "#8B5CF6", "#F59E0B", "#10B981", "#6366F1"

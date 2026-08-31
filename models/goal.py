@@ -35,7 +35,8 @@ class Goal(db.Model):
 
     target_date = db.Column(
         db.Date,
-        nullable=False
+        nullable=False,
+        index=True
     )
 
     category = db.Column(
@@ -73,7 +74,8 @@ class Goal(db.Model):
     user_id = db.Column(
         db.Integer,
         db.ForeignKey("users.id"),
-        nullable=False
+        nullable=False,
+        index=True
     )
 
     # Relationship with Expenses

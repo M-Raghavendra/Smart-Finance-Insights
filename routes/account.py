@@ -27,13 +27,23 @@ def accounts():
 
         account_name = request.form.get("account_name")
         account_type = request.form.get("account_type")
-        balance = request.form.get("balance")
+        balance_raw = request.form.get("balance")
         description = request.form.get("description")
+
+        if not account_name or not account_type or balance_raw is None or str(balance_raw).strip() == "":
+            flash("Please fill in all required fields.", "danger")
+            return redirect(url_for("account.accounts"))
+
+        try:
+            balance = float(balance_raw)
+        except (ValueError, TypeError):
+            flash("Invalid account balance format.", "danger")
+            return redirect(url_for("account.accounts"))
 
         new_account = Account(
             account_name=account_name,
             account_type=account_type,
-            balance=float(balance),
+            balance=balance,
             description=description,
             user_id=current_user.id
         )
@@ -69,10 +79,25 @@ def edit_account(id):
 
     if request.method == "POST":
 
-        account_data.account_name = request.form.get("account_name")
-        account_data.account_type = request.form.get("account_type")
-        account_data.balance = float(request.form.get("balance"))
-        account_data.description = request.form.get("description")
+        account_name = request.form.get("account_name")
+        account_type = request.form.get("account_type")
+        balance_raw = request.form.get("balance")
+        description = request.form.get("description")
+
+        if not account_name or not account_type or balance_raw is None or str(balance_raw).strip() == "":
+            flash("Please fill in all required fields.", "danger")
+            return redirect(url_for("account.edit_account", id=id))
+
+        try:
+            balance = float(balance_raw)
+        except (ValueError, TypeError):
+            flash("Invalid account balance format.", "danger")
+            return redirect(url_for("account.edit_account", id=id))
+
+        account_data.account_name = account_name
+        account_data.account_type = account_type
+        account_data.balance = balance
+        account_data.description = description
 
         db.session.commit()
 

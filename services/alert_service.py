@@ -42,10 +42,9 @@ def check_and_create_alerts(user_id):
 
     # 1. Budget Alerts (80% and 100% per budget)
     budgets = Budget.query.filter_by(user_id=user_id).all()
-    user_expenses = Expense.query.filter(
-        Expense.user_id == user_id
-    ).all()
-    curr_m_exp = [e for e in user_expenses if e.expense_date and e.expense_date.month == date.today().month and e.expense_date.year == date.today().year]
+    user_expenses = Expense.query.filter_by(user_id=user_id).all()
+    first_day_curr = date(today.year, today.month, 1)
+    curr_m_exp = [e for e in user_expenses if e.expense_date and e.expense_date >= first_day_curr]
 
     # Map budget amounts to categories for realistic presentation alert labels
     category_budget_map = {

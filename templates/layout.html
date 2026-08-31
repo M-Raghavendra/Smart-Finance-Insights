@@ -6,6 +6,19 @@
 
     <title>{% block title %}FinSight{% endblock %}</title>
 
+    <script>
+        (function() {
+            var savedTheme = "{{ current_user.theme_preference if current_user and current_user.is_authenticated and current_user.theme_preference else 'light' }}";
+            var localTheme = localStorage.getItem('finsight_theme');
+            var theme = (savedTheme && savedTheme !== 'system') ? savedTheme : (localTheme || 'light');
+            if (theme !== 'dark') { theme = 'light'; }
+            localStorage.setItem('finsight_theme', theme);
+
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.setAttribute('data-rendered-theme', theme);
+        })();
+    </script>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
     {% block css %}{% endblock %}
 
@@ -85,6 +98,14 @@
             </li>
 
             <li>
+                <a href="{{ url_for('reports.view_reports') }}" class="{% if request.endpoint and request.endpoint.startswith('reports') %}active{% endif %}">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+
+
+            <li>
                 <a href="{{ url_for('alert.alerts') }}" class="{% if request.endpoint and request.endpoint.startswith('alert') %}active{% endif %}">
                     <i class="fa-solid fa-bell"></i>
                     <span>Alerts</span>
@@ -115,6 +136,56 @@
     <!-- Main Content -->
     <div class="main-content">
 
+        {% if current_user.is_authenticated %}
+        <div class="topbar">
+            <div class="page-title">
+                {% block page_title %}Overview{% endblock %}
+            </div>
+            <div class="top-navbar-right">
+                <!-- Compact Global Theme Selector Dropdown -->
+                <div class="nav-theme-dropdown">
+                    <button type="button" class="nav-theme-btn" id="themeDropdownBtn" title="Select Theme">
+                        <span id="themeBtnIcon"><i class="fa-solid fa-circle-half-stroke"></i></span>
+                        <span class="theme-btn-label">Theme</span>
+                        <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>
+                    </button>
+                    <div class="nav-theme-menu" id="themeDropdownMenu">
+                        <div class="theme-menu-item" onclick="selectGlobalTheme('light')">
+                            <i class="fa-solid fa-sun" style="color: #D97706;"></i>
+                            <span>Light Mode</span>
+                            <i class="fa-solid fa-check theme-check" id="check-light"></i>
+                        </div>
+                        <div class="theme-menu-item" onclick="selectGlobalTheme('dark')">
+                            <i class="fa-solid fa-moon" style="color: #3B82F6;"></i>
+                            <span>Dark Mode</span>
+                            <i class="fa-solid fa-check theme-check" id="check-dark"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Bell -->
+                <button type="button" class="nav-bell-btn" id="notificationBellBtn" title="Notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    {% if unread_alerts_count and unread_alerts_count > 0 %}
+                        <span class="bell-badge" id="bellUnreadBadge">{{ unread_alerts_count }}</span>
+                    {% endif %}
+                </button>
+
+                <!-- Profile Picture & Link -->
+                <a href="{{ url_for('profile.view_profile') }}" class="nav-profile-btn" title="View Profile">
+                    {% if current_user.profile_image %}
+                        <img src="{{ url_for('static', filename=current_user.profile_image) }}" alt="Profile" class="nav-profile-img">
+                    {% elif current_user.profile and current_user.profile.profile_photo %}
+                        <img src="{{ url_for('static', filename='uploads/profile_pictures/' + current_user.profile.profile_photo) }}" alt="Profile" class="nav-profile-img">
+                    {% else %}
+                        <i class="fa-solid fa-circle-user"></i>
+                    {% endif %}
+                    <span class="nav-user-name">{{ current_user.full_name }}</span>
+                    <i class="fa-solid fa-chevron-down" style="font-size: 11px; margin-left: 2px;"></i>
+                </a>
+            </div>
+        </div>
+        {% endif %}
 
         <div class="content">
 
@@ -137,5 +208,176 @@
 
 </div>
 
+{% if current_user.is_authenticated %}
+<!-- Right-Side Notification Popup Drawer -->
+<div class="notification-drawer-overlay" id="notificationOverlay"></div>
+<div class="notification-drawer" id="notificationDrawer">
+    <div class="drawer-header">
+        <div class="drawer-title">
+            <i class="fa-solid fa-bell" style="color: #2563EB;"></i>
+            <h3>Notifications</h3>
+            {% if unread_alerts_count and unread_alerts_count > 0 %}
+                <span class="drawer-unread-tag" id="drawerUnreadTag">{{ unread_alerts_count }} unread</span>
+            {% endif %}
+        </div>
+        <button type="button" class="drawer-close-btn" id="drawerCloseBtn">&times;</button>
+    </div>
+    <div class="drawer-body">
+        {% if global_recent_alerts %}
+            <div class="drawer-alert-list">
+                {% for alert in global_recent_alerts %}
+                    <div class="drawer-alert-card {{ alert.severity }} {% if not alert.is_read %}unread{% endif %}">
+                        <div class="drawer-alert-icon">
+                            {% if alert.severity == 'danger' %}
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                            {% elif alert.severity == 'warning' %}
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            {% elif alert.severity == 'success' %}
+                                <i class="fa-solid fa-circle-check"></i>
+                            {% else %}
+                                <i class="fa-solid fa-circle-info"></i>
+                            {% endif %}
+                        </div>
+                        <div class="drawer-alert-content">
+                            <div class="drawer-alert-top">
+                                <span class="drawer-alert-title">{{ alert.title }}</span>
+                                {% if not alert.is_read %}
+                                    <span class="badge-new">NEW</span>
+                                {% endif %}
+                            </div>
+                            <p class="drawer-alert-msg">{{ alert.message }}</p>
+                            <div class="drawer-alert-footer">
+                                <span class="drawer-alert-time"><i class="fa-regular fa-clock"></i> {{ alert.created_at.strftime('%d %b %Y, %I:%M %p') if alert.created_at else '' }}</span>
+                                <form action="{{ url_for('alert.toggle_alert_read', alert_id=alert.id) }}" method="POST" style="display:inline;">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="drawer-read-btn">
+                                        {% if alert.is_read %}Mark Unread{% else %}Mark Read{% endif %}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="drawer-empty-state">
+                <i class="fa-solid fa-bell-slash" style="font-size: 32px; color: #94A3B8; margin-bottom: 10px;"></i>
+                <p>No new notifications</p>
+            </div>
+        {% endif %}
+    </div>
+    <div class="drawer-footer">
+        <a href="{{ url_for('alert.alerts') }}" class="btn-view-all-alerts">View All Alerts Dashboard &rarr;</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const bellBtn = document.getElementById("notificationBellBtn");
+        const overlay = document.getElementById("notificationOverlay");
+        const drawer = document.getElementById("notificationDrawer");
+        const closeBtn = document.getElementById("drawerCloseBtn");
+
+        function openDrawer() {
+            if (overlay && drawer) {
+                overlay.classList.add("active");
+                drawer.classList.add("active");
+            }
+        }
+
+        function closeDrawer() {
+            if (overlay && drawer) {
+                overlay.classList.remove("active");
+                drawer.classList.remove("active");
+            }
+        }
+
+        if (bellBtn) {
+            bellBtn.addEventListener("click", openDrawer);
+        }
+        if (overlay) {
+            overlay.addEventListener("click", closeDrawer);
+        }
+        if (closeBtn) {
+            closeBtn.addEventListener("click", closeDrawer);
+        }
+    });
+</script>
+{% endif %}
+
+<script>
+    function updateThemeUIState(theme) {
+        var checkLight = document.getElementById("check-light");
+        var checkDark = document.getElementById("check-dark");
+        var themeIcon = document.getElementById("themeBtnIcon");
+
+        if (checkLight && checkLight.parentElement) checkLight.parentElement.classList.toggle("selected", theme === "light");
+        if (checkDark && checkDark.parentElement) checkDark.parentElement.classList.toggle("selected", theme === "dark");
+
+        if (themeIcon) {
+            if (theme === "dark") {
+                themeIcon.innerHTML = '<i class="fa-solid fa-moon" style="color: #3B82F6;"></i>';
+            } else {
+                themeIcon.innerHTML = '<i class="fa-solid fa-sun" style="color: #D97706;"></i>';
+            }
+        }
+    }
+
+    function applyTheme(theme) {
+        if (theme !== 'dark') { theme = 'light'; }
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.setAttribute('data-rendered-theme', theme);
+        localStorage.setItem('finsight_theme', theme);
+
+        updateThemeUIState(theme);
+
+        // Update Chart.js themes if charts exist on page
+        if (window.Chart) {
+            if (typeof updateChartColors === 'function') {
+                updateChartColors();
+            }
+        }
+
+        // Persist theme choice to database
+        if ("{{ current_user.is_authenticated }}" === "True") {
+            fetch("{{ url_for('profile.update_theme') }}", {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({ theme_preference: theme })
+            }).catch(function(err){ console.warn("Theme save warning:", err); });
+        }
+    }
+
+    function selectGlobalTheme(theme) {
+        applyTheme(theme);
+        var menu = document.getElementById("themeDropdownMenu");
+        if (menu) menu.classList.remove("active");
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var themeBtn = document.getElementById("themeDropdownBtn");
+        var themeMenu = document.getElementById("themeDropdownMenu");
+        
+        if (themeBtn && themeMenu) {
+            themeBtn.addEventListener("click", function(e) {
+                e.stopPropagation();
+                themeMenu.classList.toggle("active");
+            });
+
+            document.addEventListener("click", function(e) {
+                if (!themeMenu.contains(e.target) && !themeBtn.contains(e.target)) {
+                    themeMenu.classList.remove("active");
+                }
+            });
+        }
+
+        var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        if (currentTheme !== 'dark') { currentTheme = 'light'; }
+        updateThemeUIState(currentTheme);
+    });
+</script>
 </body>
 </html>

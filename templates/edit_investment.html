@@ -33,6 +33,7 @@ Edit Investment
 
 
         <form method="POST" class="investment-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
             <!-- Instrument + Asset Type -->
 

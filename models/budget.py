@@ -21,7 +21,8 @@ class Budget(db.Model):
     user_id = db.Column(
         db.Integer,
         db.ForeignKey("users.id"),
-        nullable=False
+        nullable=False,
+        index=True
     )
 
     goal_id = db.Column(

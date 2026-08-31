@@ -14,7 +14,8 @@ class GoalPart(db.Model):
     goal_id = db.Column(
         db.Integer,
         db.ForeignKey("goals.id"),
-        nullable=False
+        nullable=False,
+        index=True
     )
 
     part_name = db.Column(

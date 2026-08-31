@@ -888,6 +888,7 @@ Goal Details
         >
 
             <form method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <div class="part-form-grid">
 
@@ -1217,6 +1218,7 @@ Goal Details
                                         id=part.id
                                     ) }}"
                                 >
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                                     <select
                                         name="status"
@@ -1285,6 +1287,7 @@ Goal Details
                                         'Delete this part?'
                                     )"
                                 >
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                                     <button
                                         type="submit"
@@ -1325,6 +1328,7 @@ Goal Details
                                             part_id=part.id
                                         ) }}"
                                     >
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
 
                                         <div class="edit-form-grid">

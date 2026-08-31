@@ -17,6 +17,7 @@ Edit Expense
 <div class="expense-container">
 
     <form method="POST" class="expense-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
         <h2>Edit Expense</h2>
 

@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
+from datetime import datetime
 from extensions import db
 from models.alert import FinancialAlert
 from services.alert_service import check_and_create_alerts, mark_alert_as_read
@@ -15,8 +16,28 @@ def alerts():
     # 1. Trigger Alert Check
     check_and_create_alerts(user_id)
 
-    # 2. Fetch All User Alerts
-    all_user_alerts = FinancialAlert.query.filter_by(user_id=user_id).order_by(FinancialAlert.created_at.desc()).all()
+    # 2. Date & Type Filter Handling
+    from_date_str = request.args.get("from_date", "").strip()
+    to_date_str = request.args.get("to_date", "").strip()
+
+    query = FinancialAlert.query.filter_by(user_id=user_id)
+
+    if from_date_str:
+        try:
+            f_date = datetime.strptime(from_date_str, "%Y-%m-%d").date()
+            query = query.filter(FinancialAlert.created_at >= f_date)
+        except ValueError:
+            pass
+
+    if to_date_str:
+        try:
+            t_date = datetime.strptime(to_date_str, "%Y-%m-%d").date()
+            t_datetime = datetime.combine(t_date, datetime.max.time())
+            query = query.filter(FinancialAlert.created_at <= t_datetime)
+        except ValueError:
+            pass
+
+    all_user_alerts = query.order_by(FinancialAlert.created_at.desc()).all()
 
     # 3. Calculate Summary Statistics
     total_alerts = len(all_user_alerts)
@@ -51,6 +72,8 @@ def alerts():
         "alerts.html",
         alerts=filtered_alerts,
         active_filter=active_filter,
+        from_date=from_date_str,
+        to_date=to_date_str,
         total_alerts=total_alerts,
         unread_alerts=unread_alerts,
         critical_alerts=critical_alerts,

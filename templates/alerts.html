@@ -44,11 +44,11 @@ FinSight — Financial Alerts Dashboard
     }
 
     .summary-card {
-        background: #ffffff;
+        background: var(--card-bg, #ffffff);
         border-radius: 12px;
         padding: 18px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        border: 1px solid #E2E8F0;
+        border: 1px solid var(--card-border, #E2E8F0);
         display: flex;
         align-items: center;
         gap: 14px;
@@ -69,9 +69,14 @@ FinSight — Financial Alerts Dashboard
     .summary-icon.critical { background: #FFF7ED; color: #EA580C; }
     .summary-icon.resolved { background: #F0FDF4; color: #16A34A; }
 
+    [data-rendered-theme="dark"] .summary-icon.total { background: #172554; color: #93c5fd; }
+    [data-rendered-theme="dark"] .summary-icon.unread { background: #371b1e; color: #fca5a5; }
+    [data-rendered-theme="dark"] .summary-icon.critical { background: #451a03; color: #fde047; }
+    [data-rendered-theme="dark"] .summary-icon.resolved { background: #143820; color: #86efac; }
+
     .summary-info .label {
         font-size: 13px;
-        color: #64748B;
+        color: var(--text-secondary, #64748B);
         display: block;
         margin-bottom: 2px;
     }
@@ -79,7 +84,7 @@ FinSight — Financial Alerts Dashboard
     .summary-info .value {
         font-size: 22px;
         font-weight: 700;
-        color: #0F172A;
+        color: var(--text-primary, #0F172A);
     }
 
     /* Filter Pills */
@@ -94,8 +99,8 @@ FinSight — Financial Alerts Dashboard
     .filter-pill {
         padding: 8px 16px;
         border-radius: 20px;
-        background: #F1F5F9;
-        color: #475569;
+        background: var(--bg-primary, #F1F5F9);
+        color: var(--text-secondary, #475569);
         text-decoration: none;
         font-size: 13px;
         font-weight: 600;
@@ -115,7 +120,7 @@ FinSight — Financial Alerts Dashboard
     }
 
     .alert-card {
-        background: #ffffff;
+        background: var(--card-bg, #ffffff);
         border-radius: 12px;
         padding: 18px;
         border-left: 5px solid #CBD5E1;
@@ -136,6 +141,11 @@ FinSight — Financial Alerts Dashboard
     .alert-card.info { border-left-color: #2563EB; background: #EFF6FF; }
     .alert-card.success { border-left-color: #16A34A; background: #F0FDF4; }
 
+    [data-rendered-theme="dark"] .alert-card.danger { background: #371b1e; }
+    [data-rendered-theme="dark"] .alert-card.warning { background: #372910; }
+    [data-rendered-theme="dark"] .alert-card.info { background: #172554; }
+    [data-rendered-theme="dark"] .alert-card.success { background: #143820; }
+
     .alert-main {
         display: flex;
         align-items: flex-start;
@@ -155,7 +165,7 @@ FinSight — Financial Alerts Dashboard
     .alert-details h3 {
         font-size: 16px;
         font-weight: 700;
-        color: #0F172A;
+        color: var(--text-primary, #0F172A);
         margin: 0 0 4px 0;
         display: flex;
         align-items: center;
@@ -163,7 +173,7 @@ FinSight — Financial Alerts Dashboard
     }
 
     .alert-details p {
-        color: #334155;
+        color: var(--text-secondary, #334155);
         font-size: 14px;
         margin: 0 0 6px 0;
         line-height: 1.4;
@@ -171,7 +181,7 @@ FinSight — Financial Alerts Dashboard
 
     .alert-meta {
         font-size: 12px;
-        color: #64748B;
+        color: var(--text-muted, #64748B);
         display: flex;
         align-items: center;
         gap: 12px;
@@ -182,26 +192,27 @@ FinSight — Financial Alerts Dashboard
         border-radius: 8px;
         font-size: 13px;
         font-weight: 600;
-        border: 1px solid #CBD5E1;
-        background: #ffffff;
-        color: #475569;
+        border: 1px solid var(--card-border, #CBD5E1);
+        background: var(--card-bg, #ffffff);
+        color: var(--text-secondary, #475569);
         cursor: pointer;
         transition: all 0.2s ease;
         white-space: nowrap;
     }
 
     .btn-toggle-read:hover {
-        background: #F1F5F9;
-        color: #0F172A;
+        background: #2563EB;
+        color: #FFFFFF;
+        border-color: #2563EB;
     }
 
     .empty-state {
-        background: #ffffff;
+        background: var(--card-bg, #ffffff);
         border-radius: 12px;
         padding: 40px 20px;
         text-align: center;
-        color: #64748B;
-        border: 1px dashed #CBD5E1;
+        color: var(--text-muted, #64748B);
+        border: 1px dashed var(--card-border, #CBD5E1);
     }
 </style>
 {% endblock %}
@@ -249,14 +260,30 @@ FinSight — Financial Alerts Dashboard
         </div>
     </div>
 
-    <!-- 2. Filter Pills -->
-    <div class="filter-bar">
-        <a href="{{ url_for('alert.alerts', filter='all') }}" class="filter-pill {% if active_filter == 'all' %}active{% endif %}">All Alerts</a>
-        <a href="{{ url_for('alert.alerts', filter='unread') }}" class="filter-pill {% if active_filter == 'unread' %}active{% endif %}">Unread ({{ unread_alerts }})</a>
-        <a href="{{ url_for('alert.alerts', filter='budget') }}" class="filter-pill {% if active_filter == 'budget' %}active{% endif %}">Budget Alerts</a>
-        <a href="{{ url_for('alert.alerts', filter='goal') }}" class="filter-pill {% if active_filter == 'goal' %}active{% endif %}">Goal Milestones</a>
-        <a href="{{ url_for('alert.alerts', filter='spending') }}" class="filter-pill {% if active_filter == 'spending' %}active{% endif %}">Spending Alerts</a>
-        <a href="{{ url_for('alert.alerts', filter='critical') }}" class="filter-pill {% if active_filter == 'critical' %}active{% endif %}">Critical Only</a>
+    <!-- 2. Filter Pills & Date Range Filter Bar -->
+    <div style="background: var(--card-bg, #ffffff); padding: 16px; border-radius: 12px; border: 1px solid var(--card-border, #E2E8F0); margin-bottom: 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 15px;">
+        <div class="filter-bar" style="margin-bottom: 0;">
+            <a href="{{ url_for('alert.alerts', filter='all', from_date=from_date, to_date=to_date) }}" class="filter-pill {% if active_filter == 'all' %}active{% endif %}">All Alerts</a>
+            <a href="{{ url_for('alert.alerts', filter='unread', from_date=from_date, to_date=to_date) }}" class="filter-pill {% if active_filter == 'unread' %}active{% endif %}">Unread ({{ unread_alerts }})</a>
+            <a href="{{ url_for('alert.alerts', filter='budget', from_date=from_date, to_date=to_date) }}" class="filter-pill {% if active_filter == 'budget' %}active{% endif %}">Budget Alerts</a>
+            <a href="{{ url_for('alert.alerts', filter='goal', from_date=from_date, to_date=to_date) }}" class="filter-pill {% if active_filter == 'goal' %}active{% endif %}">Goal Milestones</a>
+            <a href="{{ url_for('alert.alerts', filter='spending', from_date=from_date, to_date=to_date) }}" class="filter-pill {% if active_filter == 'spending' %}active{% endif %}">Spending Alerts</a>
+            <a href="{{ url_for('alert.alerts', filter='critical', from_date=from_date, to_date=to_date) }}" class="filter-pill {% if active_filter == 'critical' %}active{% endif %}">Critical Only</a>
+        </div>
+
+        <form method="GET" action="{{ url_for('alert.alerts') }}" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <input type="hidden" name="filter" value="{{ active_filter }}">
+            <label style="font-size: 13px; font-weight: 600; color: var(--text-primary, #475569);"><i class="fa-regular fa-calendar-days"></i> From:</label>
+            <input type="date" name="from_date" value="{{ from_date or '' }}" style="padding: 6px 10px; border: 1px solid var(--input-border, #CBD5E1); background: var(--input-bg, #fff); color: var(--input-text, #0f172a); border-radius: 8px; font-size: 13px;">
+            <label style="font-size: 13px; font-weight: 600; color: var(--text-primary, #475569);">To:</label>
+            <input type="date" name="to_date" value="{{ to_date or '' }}" style="padding: 6px 10px; border: 1px solid var(--input-border, #CBD5E1); background: var(--input-bg, #fff); color: var(--input-text, #0f172a); border-radius: 8px; font-size: 13px;">
+            <button type="submit" style="padding: 6px 14px; background: #2563EB; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                <i class="fa-solid fa-filter"></i> Apply Date
+            </button>
+            {% if from_date or to_date %}
+                <a href="{{ url_for('alert.alerts', filter=active_filter) }}" style="font-size: 12px; color: #DC2626; text-decoration: none; font-weight: 600;">Reset Date</a>
+            {% endif %}
+        </form>
     </div>
 
     <!-- 3. Alert Items List -->
@@ -291,6 +318,7 @@ FinSight — Financial Alerts Dashboard
                 </div>
             </div>
             <form action="{{ url_for('alert.toggle_alert_read', alert_id=alert.id) }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <button type="submit" class="btn-toggle-read">
                     {% if alert.is_read %}
                         <i class="fa-solid fa-envelope-open"></i> Mark Unread

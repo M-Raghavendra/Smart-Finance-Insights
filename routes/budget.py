@@ -17,10 +17,30 @@ def budgets():
 
     if request.method == "POST":
 
-        monthly_budget = request.form.get("monthly_budget")
+        monthly_budget_raw = request.form.get("monthly_budget")
         month = request.form.get("month")
-        year = request.form.get("year")
+        year_raw = request.form.get("year")
         goal_id_raw = request.form.get("goal_id")
+
+        if not monthly_budget_raw or not month or not year_raw:
+            flash("Please fill in all required fields.", "danger")
+            return redirect(url_for("budget.budgets"))
+
+        try:
+            monthly_budget = float(monthly_budget_raw)
+            if monthly_budget <= 0:
+                flash("Monthly budget must be greater than zero.", "danger")
+                return redirect(url_for("budget.budgets"))
+        except (ValueError, TypeError):
+            flash("Invalid monthly budget amount format.", "danger")
+            return redirect(url_for("budget.budgets"))
+
+        try:
+            year = int(year_raw)
+        except (ValueError, TypeError):
+            flash("Invalid year format.", "danger")
+            return redirect(url_for("budget.budgets"))
+
         goal_id = int(goal_id_raw) if goal_id_raw and goal_id_raw.isdigit() else None
 
         if current_budget:

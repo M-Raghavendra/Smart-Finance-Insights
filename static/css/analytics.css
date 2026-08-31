@@ -10,7 +10,8 @@
 
 /* Header */
 .analytics-header {
-    background: white;
+    background: var(--card-bg, white);
+    border: 1px solid var(--card-border, #e2e8f0);
     padding: 25px 30px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -24,7 +25,7 @@
 .analytics-header h1 {
     font-size: 26px;
     font-weight: 700;
-    color: #0F172A;
+    color: var(--text-primary, #0F172A);
     display: flex;
     align-items: center;
     gap: 10px;
@@ -32,12 +33,12 @@
 
 .analytics-header p {
     font-size: 14px;
-    color: #64748B;
+    color: var(--text-secondary, #64748B);
     margin-top: 4px;
 }
 
 .header-badge {
-    background: #EFF6FF;
+    background: var(--bg-primary, #EFF6FF);
     color: #2563EB;
     padding: 8px 16px;
     border-radius: 20px;
@@ -56,7 +57,8 @@
 }
 
 .summary-card {
-    background: white;
+    background: var(--card-bg, white);
+    border: 1px solid var(--card-border, #e2e8f0);
     padding: 20px 22px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
@@ -89,6 +91,13 @@
 .card-icon.investment { background: #FEF3C7; color: #D97706; }
 .card-icon.goals { background: #E0E7FF; color: #4F46E5; }
 
+[data-rendered-theme="dark"] .card-icon.income { background: #143820; color: #86efac; }
+[data-rendered-theme="dark"] .card-icon.expense { background: #371b1e; color: #fca5a5; }
+[data-rendered-theme="dark"] .card-icon.savings { background: #172554; color: #93c5fd; }
+[data-rendered-theme="dark"] .card-icon.rate { background: #3b0764; color: #d8b4fe; }
+[data-rendered-theme="dark"] .card-icon.investment { background: #451a03; color: #fde047; }
+[data-rendered-theme="dark"] .card-icon.goals { background: #1e1b4b; color: #a5b4fc; }
+
 .card-info {
     display: flex;
     flex-direction: column;
@@ -96,20 +105,20 @@
 
 .card-info .label {
     font-size: 13px;
-    color: #64748B;
+    color: var(--text-secondary, #64748B);
     font-weight: 500;
 }
 
 .card-info .value {
     font-size: 22px;
     font-weight: 700;
-    color: #0F172A;
+    color: var(--text-primary, #0F172A);
     margin: 3px 0;
 }
 
 .card-info .subtext {
     font-size: 11px;
-    color: #94A3B8;
+    color: var(--text-muted, #94A3B8);
 }
 
 /* Row Grid Layouts */
@@ -125,7 +134,8 @@
 
 /* Analytics Cards */
 .analytics-card {
-    background: white;
+    background: var(--card-bg, white);
+    border: 1px solid var(--card-border, #e2e8f0);
     border-radius: 12px;
     padding: 25px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -138,14 +148,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #F1F5F9;
+    border-bottom: 1px solid var(--card-border, #F1F5F9);
     padding-bottom: 15px;
 }
 
 .card-header-clean h2 {
     font-size: 18px;
     font-weight: 600;
-    color: #0F172A;
+    color: var(--text-primary, #0F172A);
     display: flex;
     align-items: center;
     gap: 10px;
@@ -181,26 +191,26 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 14px;
-    background: #F8FAFC;
+    background: var(--bg-primary, #F8FAFC);
     border-radius: 8px;
     font-size: 14px;
 }
 
 .metric-row .name {
-    color: #475569;
+    color: var(--text-secondary, #475569);
     font-weight: 500;
 }
 
 .metric-row .val {
     font-weight: 700;
-    color: #0F172A;
+    color: var(--text-primary, #0F172A);
 }
 
 /* Progress Bars */
 .progress-bar-container {
     width: 100%;
     height: 8px;
-    background: #E2E8F0;
+    background: var(--topbar-border, #E2E8F0);
     border-radius: 4px;
     overflow: hidden;
     margin-top: 6px;
@@ -232,6 +242,12 @@
 .badge-info { background: #DBEAFE; color: #1D4ED8; }
 .badge-secondary { background: #F1F5F9; color: #64748B; }
 
+[data-rendered-theme="dark"] .badge-success { background: #143820; color: #86efac; }
+[data-rendered-theme="dark"] .badge-warning { background: #451a03; color: #fde047; }
+[data-rendered-theme="dark"] .badge-danger { background: #371b1e; color: #fca5a5; }
+[data-rendered-theme="dark"] .badge-info { background: #172554; color: #93c5fd; }
+[data-rendered-theme="dark"] .badge-secondary { background: #1f2937; color: #cbd5e1; }
+
 /* Table Styling */
 .table-responsive {
     overflow-x: auto;
@@ -245,21 +261,21 @@
 }
 
 .analytics-table th {
-    background: #F8FAFC;
-    color: #475569;
+    background: var(--table-header-bg, #F8FAFC);
+    color: var(--text-primary, #475569);
     font-weight: 600;
     padding: 12px 16px;
-    border-bottom: 2px solid #E2E8F0;
+    border-bottom: 2px solid var(--table-border, #E2E8F0);
 }
 
 .analytics-table td {
     padding: 14px 16px;
-    border-bottom: 1px solid #F1F5F9;
-    color: #1E293B;
+    border-bottom: 1px solid var(--table-border, #F1F5F9);
+    color: var(--text-secondary, #1E293B);
 }
 
 .analytics-table tr:hover {
-    background: #F8FAFC;
+    background: var(--table-header-bg, #F8FAFC);
 }
 
 /* Alert List */
@@ -276,7 +292,7 @@
     padding: 15px 18px;
     border-radius: 10px;
     border-left: 4px solid #CBD5E1;
-    background: #F8FAFC;
+    background: var(--bg-primary, #F8FAFC);
     gap: 15px;
 }
 
@@ -284,29 +300,32 @@
 .alert-item.warning { border-left-color: #D97706; background: #FFFBEB; }
 .alert-item.info { border-left-color: #2563EB; background: #EFF6FF; }
 
+[data-rendered-theme="dark"] .alert-item.danger { background: #371b1e; }
+[data-rendered-theme="dark"] .alert-item.warning { background: #372910; }
+[data-rendered-theme="dark"] .alert-item.info { background: #172554; }
+
 .alert-content h4 {
     font-size: 15px;
     font-weight: 600;
-    color: #0F172A;
+    color: var(--text-primary, #0F172A);
     margin-bottom: 4px;
 }
 
 .alert-content p {
     font-size: 13px;
-    color: #475569;
+    color: var(--text-secondary, #475569);
 }
 
 .alert-content .time {
     font-size: 11px;
-    color: #94A3B8;
+    color: var(--text-muted, #94A3B8);
     margin-top: 4px;
-
 }
 
 .btn-mark-read {
-    background: white;
-    border: 1px solid #CBD5E1;
-    color: #475569;
+    background: var(--card-bg, white);
+    border: 1px solid var(--card-border, #CBD5E1);
+    color: var(--text-secondary, #475569);
     padding: 6px 14px;
     border-radius: 6px;
     font-size: 12px;
@@ -341,21 +360,25 @@
     color: #0369A1;
 }
 
+[data-rendered-theme="dark"] .insight-item {
+    background: #082f49;
+    border-color: #0369a1;
+    color: #7dd3fc;
+}
+
 .insight-item i {
     font-size: 18px;
     margin-top: 2px;
     flex-shrink: 0;
 }
 
-
-
 /* Empty State Message */
 .empty-state {
     padding: 25px;
     text-align: center;
-    color: #64748B;
+    color: var(--text-muted, #64748B);
     font-size: 14px;
-    background: #F8FAFC;
+    background: var(--bg-primary, #F8FAFC);
     border-radius: 8px;
 }
 

@@ -4,7 +4,8 @@
 }
 
 .expense-form{
-    background:#fff;
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--card-border, #e2e8f0);
     padding:35px;
     border-radius:15px;
     box-shadow:0 5px 18px rgba(0,0,0,.08);
@@ -12,7 +13,7 @@
 
 .expense-form h2{
     margin-bottom:30px;
-    color:#0F172A;
+    color: var(--text-primary, #0F172A);
     font-size:30px;
 }
 
@@ -24,7 +25,7 @@
     display:block;
     margin-bottom:8px;
     font-weight:600;
-    color:#334155;
+    color: var(--text-primary, #334155);
 }
 
 .form-group input,
@@ -32,19 +33,25 @@
 .form-group textarea{
     width:100%;
     padding:14px;
-    border:1px solid #CBD5E1;
+    border:1px solid var(--input-border, #CBD5E1);
     border-radius:10px;
     font-size:15px;
     outline:none;
     transition:.3s;
-    background:#fff;
+    background: var(--input-bg, #fff);
+    color: var(--input-text, #0f172a);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--text-muted, #94a3b8);
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus{
     border-color:#2563EB;
-    box-shadow:0 0 0 3px rgba(37,99,235,.15);
+    box-shadow:0 0 0 3px rgba(37,99,235,.25);
 }
 
 .form-group textarea{
@@ -68,7 +75,8 @@
 }
 .expense-table{
     margin-top:35px;
-    background:#fff;
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--card-border, #e2e8f0);
     padding:30px;
     border-radius:15px;
     box-shadow:0 5px 18px rgba(0,0,0,.08);
@@ -76,7 +84,7 @@
 
 .expense-table h2{
     margin-bottom:20px;
-    color:#0F172A;
+    color: var(--text-primary, #0F172A);
 }
 
 .expense-table table{
@@ -85,20 +93,22 @@
 }
 
 .expense-table th{
-    background:#F8FAFC;
+    background: var(--table-header-bg, #F8FAFC);
     padding:15px;
     text-align:left;
-    color:#475569;
+    color: var(--text-primary, #475569);
+    border-bottom: 1px solid var(--table-border, #e2e8f0);
 }
 
 .expense-table td{
     padding:15px;
-    border-top:1px solid #E2E8F0;
+    border-top:1px solid var(--table-border, #E2E8F0);
+    color: var(--text-secondary, #334155);
 }
 
 .no-data{
     text-align:center;
-    color:#94A3B8;
+    color: var(--text-muted, #94A3B8);
     padding:25px;
 }
 .delete-btn{
@@ -127,4 +137,16 @@
 
 .edit-btn:hover{
     background:#1d4ed8;
+}
+
+.badge-goal-link {
+    background: #EFF6FF;
+    color: #2563EB;
+    border: 1px solid #BFDBFE;
+}
+
+[data-rendered-theme="dark"] .badge-goal-link {
+    background: #172554;
+    color: #93c5fd;
+    border-color: #1e40af;
 }

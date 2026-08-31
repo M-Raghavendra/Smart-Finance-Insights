@@ -22,6 +22,7 @@ Accounts Management
         <h3>Add New Account</h3>
 
         <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
             <div class="form-group">
                 <label>Account Name</label>

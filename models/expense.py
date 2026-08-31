@@ -36,7 +36,8 @@ class Expense(db.Model):
 
     expense_date = db.Column(
         db.Date,
-        nullable=False
+        nullable=False,
+        index=True
     )
 
     description = db.Column(
@@ -57,15 +58,18 @@ class Expense(db.Model):
     user_id = db.Column(
         db.Integer,
         db.ForeignKey("users.id"),
-        nullable=False
+        nullable=False,
+        index=True
     )
 
     # Optional relationship with Financial Goal
     goal_id = db.Column(
         db.Integer,
         db.ForeignKey("goals.id"),
-        nullable=True
+        nullable=True,
+        index=True
     )
+
 
     # Relationship with Account
     account = db.relationship(

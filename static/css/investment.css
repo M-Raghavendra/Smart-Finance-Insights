@@ -1,4 +1,3 @@
-
 .investment-header {
     display: flex;
     justify-content: space-between;
@@ -10,11 +9,12 @@
     margin: 0 0 6px;
     font-size: 28px;
     font-weight: 700;
+    color: var(--text-primary, #0f172a);
 }
 
 .investment-header p {
     margin: 0;
-    color: #64748b;
+    color: var(--text-secondary, #64748b);
     font-size: 14px;
 }
 
@@ -55,14 +55,14 @@
 }
 
 .portfolio-card {
-    background: #ffffff;
+    background: var(--card-bg, #ffffff);
     border-radius: 14px;
     padding: 22px;
     display: flex;
     align-items: center;
     gap: 16px;
     box-shadow: 0 5px 20px rgba(15, 23, 42, 0.07);
-    border: 1px solid #eef2f7;
+    border: 1px solid var(--card-border, #eef2f7);
 }
 
 .portfolio-icon {
@@ -70,16 +70,17 @@
     height: 52px;
     min-width: 52px;
     border-radius: 12px;
-    background: #eff6ff;
+    background: var(--bg-primary, #eff6ff);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 23px;
+    color: #2563eb;
 }
 
 .portfolio-card span {
     display: block;
-    color: #64748b;
+    color: var(--text-secondary, #64748b);
     font-size: 13px;
     margin-bottom: 7px;
 }
@@ -87,11 +88,11 @@
 .portfolio-card h2 {
     margin: 0 0 5px;
     font-size: 24px;
-    color: #0f172a;
+    color: var(--text-primary, #0f172a);
 }
 
 .portfolio-card small {
-    color: #94a3b8;
+    color: var(--text-muted, #94a3b8);
     font-size: 12px;
 }
 
@@ -126,11 +127,11 @@
 ========================================================= */
 
 .investment-box {
-    background: #ffffff;
+    background: var(--card-bg, #ffffff);
     border-radius: 14px;
     padding: 22px;
     box-shadow: 0 5px 20px rgba(15, 23, 42, 0.07);
-    border: 1px solid #eef2f7;
+    border: 1px solid var(--card-border, #eef2f7);
 }
 
 .box-header {
@@ -143,15 +144,13 @@
 .box-header h3 {
     margin: 0;
     font-size: 18px;
-    color: #0f172a;
+    color: var(--text-primary, #0f172a);
 }
 
 .box-header span {
-    color: #64748b;
+    color: var(--text-secondary, #64748b);
     font-size: 12px;
 }
-
-
 
 .allocation-content {
     display: grid;
@@ -176,16 +175,16 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid var(--card-border, #f1f5f9);
 }
 
 .allocation-item span {
-    color: #475569;
+    color: var(--text-secondary, #475569);
     font-size: 13px;
 }
 
 .allocation-item strong {
-    color: #0f172a;
+    color: var(--text-primary, #0f172a);
     font-size: 13px;
 }
 
@@ -207,12 +206,13 @@
 }
 
 .performance-summary span {
-    color: #64748b;
+    color: var(--text-secondary, #64748b);
     font-size: 12px;
 }
 
 .performance-summary strong {
     font-size: 20px;
+    color: var(--text-primary, #0f172a);
 }
 
 .performance-placeholder {
@@ -225,7 +225,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #94a3b8;
+    color: var(--text-muted, #94a3b8);
     font-size: 14px;
 }
 
@@ -249,25 +249,26 @@
 }
 
 .investment-table th {
-    background: #f8fafc;
-    color: #64748b;
+    background: var(--table-header-bg, #f8fafc);
+    color: var(--text-primary, #64748b);
     font-size: 12px;
     font-weight: 600;
     text-align: left;
     padding: 13px 12px;
     white-space: nowrap;
+    border-bottom: 1px solid var(--table-border, #e2e8f0);
 }
 
 .investment-table td {
     padding: 15px 12px;
-    border-bottom: 1px solid #eef2f7;
+    border-bottom: 1px solid var(--table-border, #eef2f7);
     font-size: 13px;
-    color: #334155;
+    color: var(--text-secondary, #334155);
     white-space: nowrap;
 }
 
 .investment-table tbody tr:hover {
-    background: #f8fafc;
+    background: var(--table-header-bg, #f8fafc);
 }
 
 .asset-badge {
@@ -278,6 +279,11 @@
     color: #2563eb;
     font-size: 11px;
     font-weight: 600;
+}
+
+[data-rendered-theme="dark"] .asset-badge {
+    background: #172554;
+    color: #93c5fd;
 }
 
 
@@ -316,6 +322,16 @@
     background: #fee2e2;
 }
 
+[data-rendered-theme="dark"] .btn-edit {
+    background: #172554;
+    color: #93c5fd;
+}
+
+[data-rendered-theme="dark"] .btn-delete {
+    background: #371b1e;
+    color: #fca5a5;
+}
+
 
 /* =========================================================
    Empty State
@@ -337,12 +353,12 @@
 
 .empty-state p {
     margin: 0 0 6px;
-    color: #475569;
+    color: var(--text-primary, #475569);
     font-weight: 600;
 }
 
 .empty-state span {
-    color: #94a3b8;
+    color: var(--text-muted, #94a3b8);
     font-size: 13px;
 }
 
@@ -357,7 +373,7 @@
 
 .box-header p {
     margin: 6px 0 0;
-    color: #94a3b8;
+    color: var(--text-muted, #94a3b8);
     font-size: 13px;
 }
 
@@ -388,7 +404,7 @@
 }
 
 .form-group label {
-    color: #334155;
+    color: var(--text-primary, #334155);
     font-size: 13px;
     font-weight: 600;
 }
@@ -398,10 +414,10 @@
     width: 100%;
     box-sizing: border-box;
     padding: 11px 12px;
-    border: 1px solid #dbe2ea;
+    border: 1px solid var(--input-border, #dbe2ea);
     border-radius: 8px;
-    background: #ffffff;
-    color: #0f172a;
+    background: var(--input-bg, #ffffff);
+    color: var(--input-text, #0f172a);
     font-size: 13px;
     outline: none;
     transition: 0.2s ease;
@@ -469,7 +485,8 @@
    ===================================================== */
 
 .financial-goals-overview {
-    background: #ffffff;
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--card-border, #e2e8f0);
     border-radius: 14px;
     padding: 22px;
     margin-top: 20px;
@@ -488,13 +505,13 @@
 .financial-goals-header h3 {
     margin: 0;
     font-size: 18px;
-    color: #111827;
+    color: var(--text-primary, #111827);
 }
 
 .financial-goals-header p {
     margin: 6px 0 0;
     font-size: 13px;
-    color: #94a3b8;
+    color: var(--text-muted, #94a3b8);
 }
 
 .view-all-goals {
@@ -527,7 +544,7 @@
 
     padding: 15px 0;
 
-    border-bottom: 1px solid #eef2f7;
+    border-bottom: 1px solid var(--card-border, #eef2f7);
 }
 
 .financial-goal-row:last-child {
@@ -547,9 +564,10 @@
     align-items: center;
     justify-content: center;
 
-    background: #eff6ff;
+    background: var(--bg-primary, #eff6ff);
 
     font-size: 18px;
+    color: #2563eb;
 }
 
 
@@ -561,12 +579,12 @@
     font-size: 14px;
     font-weight: 600;
 
-    color: #111827;
+    color: var(--text-primary, #111827);
 }
 
 .financial-goal-info span {
     font-size: 12px;
-    color: #94a3b8;
+    color: var(--text-muted, #94a3b8);
 }
 
 
@@ -585,7 +603,7 @@
 
 .financial-goal-progress-top span {
     font-size: 11px;
-    color: #64748b;
+    color: var(--text-secondary, #64748b);
 }
 
 
@@ -595,7 +613,7 @@
     width: 100%;
     height: 7px;
 
-    background: #e5e7eb;
+    background: var(--topbar-border, #e5e7eb);
 
     border-radius: 10px;
 
@@ -626,12 +644,12 @@
 
 .financial-goal-date strong {
     font-size: 12px;
-    color: #475569;
+    color: var(--text-secondary, #475569);
 }
 
 .financial-goal-date span {
     font-size: 11px;
-    color: #94a3b8;
+    color: var(--text-muted, #94a3b8);
 }
 
 .financial-goal-date .goal-completed {
@@ -647,7 +665,7 @@
 
     padding: 45px 20px;
 
-    color: #94a3b8;
+    color: var(--text-muted, #94a3b8);
 }
 
 .no-goals-icon {
@@ -658,7 +676,7 @@
 .no-financial-goals h4 {
     margin: 0 0 5px;
 
-    color: #334155;
+    color: var(--text-primary, #334155);
 }
 
 .no-financial-goals p {
@@ -666,4 +684,3 @@
 
     font-size: 13px;
 }
-

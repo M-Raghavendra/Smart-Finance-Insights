@@ -3,7 +3,8 @@
 }
 
 .budget-card{
-    background:white;
+    background: var(--card-bg, white);
+    border: 1px solid var(--card-border, #e2e8f0);
     max-width:550px;
     padding:30px;
     border-radius:12px;
@@ -12,6 +13,7 @@
 
 .budget-card h2{
     margin-bottom:20px;
+    color: var(--text-primary, #0f172a);
 }
 
 .form-group{
@@ -22,17 +24,19 @@
     display:block;
     margin-bottom:8px;
     font-weight:600;
-    color:#374151;
+    color: var(--text-primary, #374151);
 }
 
 .form-group input, .form-group select{
     width:100%;
     padding:10px;
-    border:1px solid #ccc;
+    border:1px solid var(--input-border, #ccc);
     border-radius:8px;
     font-family:inherit;
     font-size:14px;
     box-sizing:border-box;
+    background: var(--input-bg, #fff);
+    color: var(--input-text, #0f172a);
 }
 
 .form-group select:focus, .form-group input:focus{
@@ -82,10 +86,10 @@
 .linked-goal-badge {
     margin-top: 20px;
     padding: 14px 18px;
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
+    background: var(--bg-primary, #eff6ff);
+    border: 1px solid var(--card-border, #bfdbfe);
     border-radius: 10px;
-    color: #1e40af;
+    color: var(--text-primary, #1e40af);
 }
 
 .linked-goal-badge h4 {
@@ -94,10 +98,11 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    color: var(--text-primary, #1e40af);
 }
 
 .linked-goal-badge p {
     margin: 0;
     font-size: 13px;
-    color: #3b82f6;
+    color: var(--text-secondary, #3b82f6);
 }

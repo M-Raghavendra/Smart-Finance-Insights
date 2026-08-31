@@ -13,7 +13,7 @@ class Income(db.Model):
 
     amount = db.Column(db.Float, nullable=False)
 
-    income_date = db.Column(db.Date, nullable=False)
+    income_date = db.Column(db.Date, nullable=False, index=True)
 
     description = db.Column(db.Text)
 
@@ -31,5 +31,6 @@ class Income(db.Model):
     user_id = db.Column(
         db.Integer,
         db.ForeignKey("users.id"),
-        nullable=False
+        nullable=False,
+        index=True
     )

@@ -21,6 +21,7 @@ Expense Management
         <h2>Add New Expense</h2>
 
         <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
             <div class="form-group">
                 <label>Expense Title</label>
@@ -142,7 +143,7 @@ Expense Management
                     <td>{{ expense.category }}</td>
                     <td>
                         {% if expense.goal %}
-                            <span style="background: #EFF6FF; color: #2563EB; padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 12px; border: 1px solid #BFDBFE; display: inline-block;">
+                            <span class="badge-goal-link" style="padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 12px; display: inline-block;">
                                 🎯 {{ expense.goal.goal_name }}
                             </span>
                         {% else %}

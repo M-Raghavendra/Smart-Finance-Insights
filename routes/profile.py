@@ -13,12 +13,11 @@ from werkzeug.utils import secure_filename
 profile = Blueprint("profile", __name__)
 
 
-UPLOAD_FOLDER = "static/uploads/profile"
+UPLOAD_FOLDER = "static/uploads/profile_pictures"
+ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp"}
+MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 5 MB
 
-os.makedirs(
-    UPLOAD_FOLDER,
-    exist_ok=True
-)
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 # =========================================================
@@ -78,33 +77,41 @@ def save_profile():
     # UPLOAD PROFILE PHOTO
     # =====================================================
 
-    photo = request.files.get(
-        "profile_photo"
-    )
+    photo = request.files.get("profile_photo")
 
     if photo and photo.filename != "":
+        ext = photo.filename.rsplit(".", 1)[-1].lower() if "." in photo.filename else ""
+        if ext not in ALLOWED_EXTENSIONS:
+            flash("Invalid file format. Allowed formats: JPG, JPEG, PNG, WEBP.", "danger")
+            return redirect(url_for("profile.view_profile", mode="edit"))
 
-        filename = secure_filename(
-            photo.filename
-        )
+        # File size validation (5MB)
+        photo.seek(0, os.SEEK_END)
+        file_size = photo.tell()
+        photo.seek(0)
+        if file_size > MAX_CONTENT_LENGTH:
+            flash("File size exceeds 5 MB limit.", "danger")
+            return redirect(url_for("profile.view_profile", mode="edit"))
 
-        filename = (
-            f"user_{current_user.id}_{filename}"
-        )
+        sec_name = secure_filename(photo.filename)
+        timestamp = int(datetime.utcnow().timestamp())
+        filename = f"user_{current_user.id}_{timestamp}_{sec_name}"
 
-        photo.save(
-            os.path.join(
-                UPLOAD_FOLDER,
-                filename
-            )
-        )
+        save_path = os.path.join(UPLOAD_FOLDER, filename)
+        photo.save(save_path)
 
+        relative_img_path = f"uploads/profile_pictures/{filename}"
         user_profile.profile_photo = filename
+        current_user.profile_image = relative_img_path
 
 
     # =====================================================
-    # SAVE PROFILE DETAILS
+    # SAVE PROFILE DETAILS & THEME PREFERENCE
     # =====================================================
+
+    theme_pref = data.get("theme_preference")
+    if theme_pref in ["light", "dark"]:
+        current_user.theme_preference = theme_pref
 
     user_profile.organization_name = (
         data.get("organization_name") or ""
@@ -387,3 +394,21 @@ def change_password():
             "profile.view_profile"
         )
     )
+
+
+# =========================================================
+# INSTANT THEME PREFERENCE PERSISTENCE
+# =========================================================
+
+@profile.route("/profile/theme", methods=["POST"])
+@login_required
+def update_theme():
+    req_data = request.get_json(silent=True) or request.form
+    theme_choice = req_data.get("theme_preference")
+
+    if theme_choice in ["light", "dark"]:
+        current_user.theme_preference = theme_choice
+        db.session.commit()
+        return {"status": "success", "theme_preference": theme_choice}, 200
+
+    return {"status": "error", "message": "Invalid theme selection"}, 400

@@ -21,6 +21,7 @@ Budget Management
         <h2>Monthly Budget</h2>
 
         <form id="budget-form" method="POST" action="{{ url_for('budget.budgets') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
             <div class="form-group">
                 <label>Budget Amount (₹)</label>
@@ -78,6 +79,7 @@ Budget Management
 
             {% if budget %}
                 <form method="POST" action="{{ url_for('budget.delete_budget', id=budget.id) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this budget?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="btn-delete">Delete Budget</button>
                 </form>
             {% endif %}

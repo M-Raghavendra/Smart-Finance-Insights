@@ -10,7 +10,8 @@ class FinancialAlert(db.Model):
     user_id = db.Column(
         db.Integer,
         db.ForeignKey("users.id"),
-        nullable=False
+        nullable=False,
+        index=True
     )
 
     alert_type = db.Column(
@@ -37,8 +38,10 @@ class FinancialAlert(db.Model):
     is_read = db.Column(
         db.Boolean,
         default=False,
-        nullable=False
+        nullable=False,
+        index=True
     )
+
 
     created_at = db.Column(
         db.DateTime,

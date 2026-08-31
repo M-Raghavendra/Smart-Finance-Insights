@@ -18,6 +18,10 @@ class User(UserMixin, db.Model):
         server_default=db.func.now()
     )
 
+    profile_image = db.Column(db.String(255), nullable=True)
+
+    theme_preference = db.Column(db.String(20), default="light", nullable=False)
+
     profile = db.relationship(
         "Profile",
         backref="user",

@@ -1,6 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for
+from sqlalchemy import func
 from models.user import User
-from extensions import db, bcrypt
+from extensions import db, bcrypt, limiter
 from flask_login import login_user, logout_user, login_required
 import re
 
@@ -94,7 +95,8 @@ def register():
 
     # -------------------- Check Existing Email --------------------
 
-    existing_user = User.query.filter_by(email=email).first()
+    email = email.strip().lower()
+    existing_user = User.query.filter(func.lower(User.email) == email).first()
 
     if existing_user:
         return render_template(
@@ -125,6 +127,7 @@ def register():
 # -------------------- Login --------------------
 
 @auth.route("/login", methods=["GET", "POST"])
+@limiter.limit("5 per minute")
 def login():
 
     if request.method == "GET":
@@ -136,7 +139,9 @@ def login():
     if not email or not password:
         return "Email and Password are required", 400
 
-    user = User.query.filter_by(email=email).first()
+    email = email.strip().lower()
+
+    user = User.query.filter(func.lower(User.email) == email).first()
 
     if not user:
         return "User not found", 404
